@@ -2,6 +2,7 @@ package Servlets;
 
 import java.io.IOException;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,6 +28,7 @@ public class ServletUsuarioController extends HttpServlet {
 		String email = request.getParameter("email");
 		String login = request.getParameter("login");
 		String senha = request.getParameter("senha");
+		String id = request.getParameter("id");
 		
 		ModelLogin modelLogin = new ModelLogin();
 		
@@ -34,6 +36,10 @@ public class ServletUsuarioController extends HttpServlet {
 		modelLogin.setNome(nome);
 		modelLogin.setEmail(email);
 		modelLogin.setSenha(senha);
+		modelLogin.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
+		
+		request.setAttribute("modelLogin", modelLogin);
+		request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 		
 	}
 
