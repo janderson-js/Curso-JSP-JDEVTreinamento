@@ -6,7 +6,7 @@ public class ModelLogin implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private long id;
+	private Long id;
 	private String email;
 	private String nome;
 	private String login;
@@ -18,10 +18,10 @@ public class ModelLogin implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getEmail() {
