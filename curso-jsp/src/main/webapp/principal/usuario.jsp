@@ -34,6 +34,7 @@
 													<div class="card-block">
 														<h2 class="title">Cad. Usuário</h2>
 														</br>
+														<span>${msg}</span>
 														<form class="form-material" method="post" action="<%= request.getContextPath()%>/ServletUsuarioController">
 															<div class="form-group form-default">
 																<input type="text" name="id" id="id" class="form-control"
