@@ -33,6 +33,8 @@ public class ServletUsuarioController extends HttpServlet {
 			String login = request.getParameter("login");
 			String senha = request.getParameter("senha");
 			String id = request.getParameter("id");
+			String msg = "operação realizado com sucesso!!!";
+			
 			
 			ModelLogin modelLogin = new ModelLogin();
 			
@@ -42,9 +44,20 @@ public class ServletUsuarioController extends HttpServlet {
 			modelLogin.setSenha(senha);
 			modelLogin.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
 			
-			daoUser.gravarUsuario(modelLogin);
+			if(daoUser.validarLogin(modelLogin.getLogin()) && modelLogin.getId() == null) {				
+					msg = "Já existe um usuário com esse login!!! Por favor informe outro login!!";
+			}else {
+				
+				if(modelLogin.isNovo()) {
+					msg = "Gravado com sucesso!!";
+				}else {
+					msg = "Atualizado com sucesso!!";
+				}
+				
+				modelLogin = daoUser.gravarUsuario(modelLogin);
+			}
 			
-			request.setAttribute("msg", "operação realizado com sucesso!!!");
+			request.setAttribute("msg", msg);
 			request.setAttribute("modelLogin", modelLogin);
 			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 			

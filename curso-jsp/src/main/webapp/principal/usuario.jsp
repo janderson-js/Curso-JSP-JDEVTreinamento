@@ -35,10 +35,11 @@
 														<h2 class="title">Cad. Usuário</h2>
 														</br>
 														<span>${msg}</span>
+														</br></br>
 														<form class="form-material" method="post" action="<%= request.getContextPath()%>/ServletUsuarioController">
 															<div class="form-group form-default">
 																<input type="text" name="id" id="id" class="form-control"
-																	readonly="readonly" autocomplete="off" value="${modelLogin.id}" > <span class="form-bar"></span> <label
+																	 autocomplete="off" value="${modelLogin.id}" > <span class="form-bar"></span> <label
 																	class="float-label">Id:</label>
 															</div>
 															<div class="form-group form-default">
