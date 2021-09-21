@@ -36,10 +36,11 @@
 														</br>
 														<span>${msg}</span>
 														</br></br>
-														<form class="form-material" method="post" action="<%= request.getContextPath()%>/ServletUsuarioController">
-															<div class="form-group form-default">
+														<form class="form-material" method="post" id="FormUser" action="<%= request.getContextPath()%>/ServletUsuarioController">
+															<input type="hidden" name="acao" id="acao" value="">
+															<div class="form-group form-default form-static-label">
 																<input type="text" name="id" id="id" class="form-control"
-																	 autocomplete="off" value="${modelLogin.id}" > <span class="form-bar"></span> <label
+																	 autocomplete="off" value="${modelLogin.id}" readonly="readonly"> <span class="form-bar"></span> <label
 																	class="float-label">Id:</label>
 															</div>
 															<div class="form-group form-default">
@@ -62,9 +63,9 @@
 																	required autocomplete="off" value="${modelLogin.senha}"> <span class="form-bar"></span> <label
 																	class="float-label">Senha:</label>
 															</div>
-															<button class="btn btn-primary waves-effect waves-light">Novo</button>
-															<button class="btn btn-success waves-effect waves-light">Salva</button>
-															<button class="btn btn-danger waves-effect waves-light">Excluir</button>															
+															<button type="button" class="btn btn-primary waves-effect waves-light" onclick="limarForm();" >Novo</button>
+															<button  class="btn btn-success waves-effect waves-light">Salva</button>
+															<button type="button" class="btn btn-danger waves-effect waves-light" onclick="deletar();">Excluir</button>															
 														</form>
 													</div>
 												</div>
@@ -82,6 +83,21 @@
 		</div>
 	</div>
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
+	<script type="text/javascript">
+		function deletar() {
+			document.getElementById("FormUser").method = 'get';
+			document.getElementById("acao").value = 'deletar';
+			document.getElementById("FormUser").submit();
+		}
+	
+		function limarForm() {
+			var elementos = document.getElementById("FormUser");
+			
+			for(p = 0; p < elementos.length; p++){
+				elementos[p].value = '';
+			}
+		}
+	</script>
 </body>
 
 </html>
