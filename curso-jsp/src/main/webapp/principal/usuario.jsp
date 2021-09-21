@@ -85,9 +85,13 @@
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
 		function deletar() {
-			document.getElementById("FormUser").method = 'get';
-			document.getElementById("acao").value = 'deletar';
-			document.getElementById("FormUser").submit();
+			
+			if(confirm('Deseja excluir?')){
+			
+				document.getElementById("FormUser").method = 'get';
+				document.getElementById("acao").value = 'deletar';
+				document.getElementById("FormUser").submit();
+			}
 		}
 	
 		function limarForm() {
