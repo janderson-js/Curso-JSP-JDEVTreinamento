@@ -34,7 +34,7 @@
 													<div class="card-block">
 														<h2 class="title">Cad. Usuário</h2>
 														</br>
-														<span>${msg}</span>
+														<span id="msg">${msg}</span>
 														</br></br>
 														<form class="form-material" method="post" id="FormUser" action="<%= request.getContextPath()%>/ServletUsuarioController">
 															<input type="hidden" name="acao" id="acao" value="">
@@ -65,7 +65,7 @@
 															</div>
 															<button type="button" class="btn btn-primary waves-effect waves-light" onclick="limarForm();" >Novo</button>
 															<button  class="btn btn-success waves-effect waves-light">Salva</button>
-															<button type="button" class="btn btn-danger waves-effect waves-light" onclick="deletar();">Excluir</button>															
+															<button type="button" class="btn btn-danger waves-effect waves-light" onclick="deleteComAjax();">Excluir</button>															
 														</form>
 													</div>
 												</div>
@@ -84,6 +84,29 @@
 	</div>
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
+		function deleteComAjax() {
+			if(confirm('Deseja excluir?')){
+				
+				var urlAction = document.getElementById('FormUser').action;
+				var idUser = document.getElementById('id').value;
+				
+				$.ajax({
+					
+					method: "get",
+					url: urlAction,
+					data: "id="+ idUser + "&acao=deletarAjax",
+					success: function(response) {
+						limarForm();
+						document.getElementById('msg').textContent = response;
+					}
+					
+				}).fail(function(xhr, status, errorThrown){
+					alert('Erro ao deletar usuario por id:' + xhr.responseText);
+				});
+				
+			}
+		}
+	
 		function deletar() {
 			
 			if(confirm('Deseja excluir?')){
