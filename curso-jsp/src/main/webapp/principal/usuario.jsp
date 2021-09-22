@@ -108,10 +108,12 @@
 				<div class="modal-body">
 
 					<div class="input-group mb-3">
-						<input type="text" class="form-control" placeholder="Nome" id="nomeBuscar"
-							aria-label="Recipient's username" aria-describedby="basic-addon2">
+						<input type="text" class="form-control" placeholder="Nome"
+							id="nomeBuscar" aria-label="Recipient's username"
+							aria-describedby="basic-addon2">
 						<div class="input-group-append">
-							<button class="btn btn-success waves-effect waves-light" type="button" onclick="buscarUser()">Pesquisar</button>
+							<button class="btn btn-success waves-effect waves-light"
+								type="button" onclick="buscarUser()">Pesquisar</button>
 						</div>
 					</div>
 
@@ -139,18 +141,34 @@
 
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
-		
 		function buscarUser() {
-			
+
 			var nomeBuscar = document.getElementById('nomeBuscar').value;
 			
-			if(nomeBuscar != null && nomeBuscar != '' && nomeBuscar.trim() != ''){
-				alert(nomeBuscar);	
+
+			if (nomeBuscar != null && nomeBuscar != '' && nomeBuscar.trim() != '') {
+				
+				var urlAction = document.getElementById('FormUser').action;
+
+				$.ajax({
+
+					method : "get",
+					url : urlAction,
+					data : "nomeBuscar=" + nomeBuscar + "&acao=buscarUserAjax",
+					success : function(response) {
+						
+						
+						
+					}
+
+				}).fail(
+					function(xhr, status, errorThrown) {
+						alert('Erro ao buscar usuario por nome:'+ xhr.responseText);
+				});
 			}
-			
+
 		}
-	
-	
+
 		function deleteComAjax() {
 			if (confirm('Deseja excluir?')) {
 

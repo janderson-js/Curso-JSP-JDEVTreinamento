@@ -1,5 +1,6 @@
 package Servlets;
 
+import java.awt.SystemColor;
 import java.io.IOException;
 
 import dao.DAOUsuarioRepository;
@@ -45,6 +46,16 @@ public class ServletUsuarioController extends HttpServlet {
 				
 				
 				response.getWriter().write("Excluido com sucesso!!");
+				
+			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarUserAjax")) {
+
+				String nomeBuscar = request.getParameter("nomeBuscar");
+
+				//daoUser.buscarUser(nomeBuscar);
+				System.out.println(nomeBuscar);
+				
+				
+				//response.getWriter().write("Excluido com sucesso!!");
 				
 			}else {
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
