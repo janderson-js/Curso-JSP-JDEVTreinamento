@@ -33,8 +33,7 @@
 												<div class="card">
 													<div class="card-block">
 														<h2 class="title">Cad. Usuário</h2>
-														</br> <span id="msg">${msg}</span> </br>
-														</br>
+														</br> <span id="msg">${msg}</span> </br> </br>
 														<form class="form-material" method="post" id="FormUser"
 															action="<%=request.getContextPath()%>/ServletUsuarioController">
 															<input type="hidden" name="acao" id="acao" value="">
@@ -99,7 +98,8 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Pesquisa de Usuário</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Pesquisa de
+						Usuário</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -107,11 +107,31 @@
 				</div>
 				<div class="modal-body">
 
-					
-			
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" placeholder="Nome" id="nomeBuscar"
+							aria-label="Recipient's username" aria-describedby="basic-addon2">
+						<div class="input-group-append">
+							<button class="btn btn-success waves-effect waves-light" type="button" onclick="buscarUser()">Pesquisar</button>
+						</div>
+					</div>
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">ID</th>
+								<th scope="col">Nome</th>
+								<th scope="col">Ver</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>					
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Fechar</button>
 				</div>
 			</div>
 		</div>
@@ -119,6 +139,18 @@
 
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
+		
+		function buscarUser() {
+			
+			var nomeBuscar = document.getElementById('nomeBuscar').value;
+			
+			if(nomeBuscar != null && nomeBuscar != '' && nomeBuscar.trim() != ''){
+				alert(nomeBuscar);	
+			}
+			
+		}
+	
+	
 		function deleteComAjax() {
 			if (confirm('Deseja excluir?')) {
 
