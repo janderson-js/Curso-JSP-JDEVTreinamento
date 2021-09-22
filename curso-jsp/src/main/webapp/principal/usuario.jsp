@@ -33,39 +33,50 @@
 												<div class="card">
 													<div class="card-block">
 														<h2 class="title">Cad. Usuário</h2>
+														</br> <span id="msg">${msg}</span> </br>
 														</br>
-														<span id="msg">${msg}</span>
-														</br></br>
-														<form class="form-material" method="post" id="FormUser" action="<%= request.getContextPath()%>/ServletUsuarioController">
+														<form class="form-material" method="post" id="FormUser"
+															action="<%=request.getContextPath()%>/ServletUsuarioController">
 															<input type="hidden" name="acao" id="acao" value="">
 															<div class="form-group form-default form-static-label">
-																<input type="text" name="id" id="id" class="form-control"
-																	 autocomplete="off" value="${modelLogin.id}" readonly="readonly"> <span class="form-bar"></span> <label
-																	class="float-label">Id:</label>
+																<input type="text" name="id" id="id"
+																	class="form-control" autocomplete="off"
+																	value="${modelLogin.id}" readonly="readonly"> <span
+																	class="form-bar"></span> <label class="float-label">Id:</label>
 															</div>
 															<div class="form-group form-default">
-																<input type="text" name="nome" id="nome" class="form-control"
-																	required autocomplete="off" value="${modelLogin.nome}" > <span class="form-bar"></span> <label
-																	class="float-label">Nome:</label>
+																<input type="text" name="nome" id="nome"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.nome}"> <span
+																	class="form-bar"></span> <label class="float-label">Nome:</label>
 															</div>
 															<div class="form-group form-default">
-																<input type="email" name="email" id="email" class="form-control"
-																	required autocomplete="off" value="${modelLogin.email}"> <span class="form-bar"></span> <label
-																	class="float-label">E-mail:</label>
+																<input type="email" name="email" id="email"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.email}"> <span
+																	class="form-bar"></span> <label class="float-label">E-mail:</label>
 															</div>
 															<div class="form-group form-default">
-																<input type="text" name="login" id="login" class="form-control"
-																	required autocomplete="off" value="${modelLogin.login}"> <span class="form-bar"></span> <label
-																	class="float-label">Login:</label>
+																<input type="text" name="login" id="login"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.login}"> <span
+																	class="form-bar"></span> <label class="float-label">Login:</label>
 															</div>
 															<div class="form-group form-default">
-																<input type="password" name="senha" id="senha" class="form-control"
-																	required autocomplete="off" value="${modelLogin.senha}"> <span class="form-bar"></span> <label
-																	class="float-label">Senha:</label>
+																<input type="password" name="senha" id="senha"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.senha}"> <span
+																	class="form-bar"></span> <label class="float-label">Senha:</label>
 															</div>
-															<button type="button" class="btn btn-primary waves-effect waves-light" onclick="limarForm();" >Novo</button>
-															<button  class="btn btn-success waves-effect waves-light">Salva</button>
-															<button type="button" class="btn btn-danger waves-effect waves-light" onclick="deleteComAjax();">Excluir</button>															
+															<button type="button"
+																class="btn btn-primary waves-effect waves-light"
+																onclick="limarForm();">Novo</button>
+															<button class="btn btn-success waves-effect waves-light">Salva</button>
+															<button type="button"
+																class="btn btn-danger waves-effect waves-light"
+																onclick="deleteComAjax();">Excluir</button>
+															<button type="button" class="btn btn-info"
+																data-toggle="modal" data-target="#ModalUsuario">Pesquisar</button>
 														</form>
 													</div>
 												</div>
@@ -82,45 +93,71 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="ModalUsuario" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Pesquisa de Usuário</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+
+					
+			
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>					
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
 		function deleteComAjax() {
-			if(confirm('Deseja excluir?')){
-				
+			if (confirm('Deseja excluir?')) {
+
 				var urlAction = document.getElementById('FormUser').action;
 				var idUser = document.getElementById('id').value;
-				
+
 				$.ajax({
-					
-					method: "get",
-					url: urlAction,
-					data: "id="+ idUser + "&acao=deletarAjax",
-					success: function(response) {
+
+					method : "get",
+					url : urlAction,
+					data : "id=" + idUser + "&acao=deletarAjax",
+					success : function(response) {
 						limarForm();
 						document.getElementById('msg').textContent = response;
 					}
-					
-				}).fail(function(xhr, status, errorThrown){
-					alert('Erro ao deletar usuario por id:' + xhr.responseText);
-				});
-				
+
+				}).fail(
+						function(xhr, status, errorThrown) {
+							alert('Erro ao deletar usuario por id:'
+									+ xhr.responseText);
+						});
+
 			}
 		}
-	
+
 		function deletar() {
-			
-			if(confirm('Deseja excluir?')){
-			
+
+			if (confirm('Deseja excluir?')) {
+
 				document.getElementById("FormUser").method = 'get';
 				document.getElementById("acao").value = 'deletar';
 				document.getElementById("FormUser").submit();
 			}
 		}
-	
+
 		function limarForm() {
 			var elementos = document.getElementById("FormUser");
-			
-			for(p = 0; p < elementos.length; p++){
+
+			for (p = 0; p < elementos.length; p++) {
 				elementos[p].value = '';
 			}
 		}
