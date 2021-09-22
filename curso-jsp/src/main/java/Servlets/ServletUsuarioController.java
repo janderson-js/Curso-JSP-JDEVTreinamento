@@ -2,6 +2,9 @@ package Servlets;
 
 import java.awt.SystemColor;
 import java.io.IOException;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.DAOUsuarioRepository;
 import jakarta.servlet.RequestDispatcher;
@@ -42,8 +45,6 @@ public class ServletUsuarioController extends HttpServlet {
 				String idUser = request.getParameter("id");
 
 				daoUser.deletarUser(idUser);
-
-				
 				
 				response.getWriter().write("Excluido com sucesso!!");
 				
@@ -51,12 +52,13 @@ public class ServletUsuarioController extends HttpServlet {
 
 				String nomeBuscar = request.getParameter("nomeBuscar");
 
-				//daoUser.buscarUser(nomeBuscar);
-				System.out.println(nomeBuscar);
+				List<ModelLogin> dadosJsonUser = daoUser.buscarUser(nomeBuscar);
 				
+				ObjectMapper objectMapper = new ObjectMapper();
+				String json = objectMapper.writeValueAsString(dadosJsonUser);
 				
-				//response.getWriter().write("Excluido com sucesso!!");
-				
+				response.getWriter().write(json);
+								
 			}else {
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 			}
