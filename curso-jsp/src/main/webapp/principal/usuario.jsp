@@ -117,19 +117,21 @@
 						</div>
 					</div>
 
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">ID</th>
-								<th scope="col">Nome</th>
-								<th scope="col">Ver</th>
-							</tr>
-						</thead>
-						<tbody>
+					<div style="height: 450px; overflow: scroll;">
+						<table class="table" id="tabelaResultados">
+							<thead>
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">Nome</th>
+									<th scope="col">Ver</th>
+								</tr>
+							</thead>
+							<tbody>
 
-						</tbody>
-					</table>
-
+							</tbody>
+						</table>						
+					</div>
+					<span id="resultados"></span>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
@@ -144,27 +146,35 @@
 		function buscarUser() {
 
 			var nomeBuscar = document.getElementById('nomeBuscar').value;
-			
 
-			if (nomeBuscar != null && nomeBuscar != '' && nomeBuscar.trim() != '') {
-				
+			if (nomeBuscar != null && nomeBuscar != ''
+					&& nomeBuscar.trim() != '') {
+
 				var urlAction = document.getElementById('FormUser').action;
 
 				$.ajax({
-
 					method : "get",
 					url : urlAction,
-					data : "nomeBuscar=" + nomeBuscar + "&acao=buscarUserAjax",
+					data : "nomeBuscar=" + nomeBuscar+ "&acao=buscarUserAjax",
 					success : function(response) {
+
+						var json = JSON.parse(response);
+
+						$('#tabelaResultados > tbody > tr').remove();
+
+						for (var p = 0; p < json.length; p++) {
+							$('#tabelaResultados > tbody').append('<tr><td>'+ json[p].id+ '</td><td>'+ json[p].nome+ '</td>'
+											+ '<td> <button type="button" class="btn btn-primary">info</button> </td></tr>');
+						}
 						
-						
+						document.getElementById('resultados').textContent = 'Resultados: '+json.length;
 						
 					}
 
 				}).fail(
 					function(xhr, status, errorThrown) {
 						alert('Erro ao buscar usuario por nome:'+ xhr.responseText);
-				});
+					});
 			}
 
 		}

@@ -100,17 +100,17 @@ public class DAOUsuarioRepository {
 	
 	public List<ModelLogin> buscarUser(String nome) throws Exception {
 		
-		List<ModelLogin> user = new ArrayList<>();
+		List<ModelLogin> user = new ArrayList<>();	
 		
-		ModelLogin modelLogin = new ModelLogin();
-		
-		String sql = "Select * from model_login WHERE upper(nome) like upper(?)";
+		String sql = "select * from model_login where upper(nome) like upper(?);";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setString(1, "%"+nome+"%");
 		ResultSet rs = pstm.executeQuery();
 		while(rs.next()) {
-	
+			
+			ModelLogin modelLogin = new ModelLogin();
+			
 			modelLogin.setId(rs.getLong("id"));
 			modelLogin.setLogin(rs.getString("login"));
 			//modelLogin.setSenha(rs.getString("senha"));
