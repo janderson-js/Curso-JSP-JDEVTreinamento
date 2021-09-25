@@ -19,7 +19,7 @@ public class DAOUsuarioRepository {
 
 	public ModelLogin gravarUsuario(ModelLogin modelLogin) throws Exception {
 
-		if(modelLogin.isNovo()) {
+		if (modelLogin.isNovo()) {
 			String sql = "INSERT INTO model_login (login, senha, nome, email) VALUES (?,?,?,?)";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
@@ -31,7 +31,7 @@ public class DAOUsuarioRepository {
 
 			pstm.execute();
 			connection.commit();
-		}else {
+		} else {
 			String sql = "UPDATE model_login SET login=?, senha=?, nome=?, email=? WHERE id = ?";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
@@ -42,109 +42,135 @@ public class DAOUsuarioRepository {
 			pstm.setLong(5, modelLogin.getId());
 
 			pstm.executeUpdate();
-			connection.commit();		
+			connection.commit();
 
 		}
-				
+
 		return this.consultarUsuario(modelLogin.getLogin());
-		
+
 	}
 
 	public ModelLogin consultarUsuario(String login) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
-		String sql = "Select * from model_login WHERE upper(login)=upper(?)";
+		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setString(1, login);
 		ResultSet rs = pstm.executeQuery();
-		if(rs.next()) {
-	
+		if (rs.next()) {
+
 			modelLogin.setId(rs.getLong("id"));
 			modelLogin.setLogin(rs.getString("login"));
 			modelLogin.setSenha(rs.getString("senha"));
 			modelLogin.setNome(rs.getString("nome"));
 			modelLogin.setEmail(rs.getString("email"));
-			
+
 		}
 		connection.commit();
-		
+
 		return modelLogin;
 
 	}
-	
+
 	public ModelLogin consultarIdUsuario(String id) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
-		String sql = "Select * from model_login WHERE id=?";
+		String sql = "Select * from model_login WHERE id=? AND useradmin is false";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setLong(1, Long.parseLong(id));
 		ResultSet rs = pstm.executeQuery();
-		if(rs.next()) {
-	
+		if (rs.next()) {
+
 			modelLogin.setId(rs.getLong("id"));
 			modelLogin.setLogin(rs.getString("login"));
 			modelLogin.setSenha(rs.getString("senha"));
 			modelLogin.setNome(rs.getString("nome"));
 			modelLogin.setEmail(rs.getString("email"));
-			
+
 		}
 		connection.commit();
-		
+
 		return modelLogin;
 
 	}
-	
+
 	public boolean validarLogin(String login) throws Exception {
-		
+
 		String sql = "select count(1) > 0 as existe from model_login where upper(login) = upper(?);";
-		
+
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setString(1, login);
 		ResultSet rs = pstm.executeQuery();
-		
-		if(rs.next()) {
+
+		if (rs.next()) {
 			return rs.getBoolean("existe");
 		}
-		
+
 		return false;
 	}
-	
+
 	public void deletarUser(String id) throws Exception {
-		
-		String sql = "DELETE FROM model_login WHERE id = ?";
-		
+
+		String sql = "DELETE FROM model_login WHERE id = ? AND useradmin is false";
+
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setLong(1, Long.parseLong(id));
-		
+
 		pstm.executeUpdate();
 		connection.commit();
 	}
-	
+
 	public List<ModelLogin> buscarUser(String nome) throws Exception {
-		
-		List<ModelLogin> user = new ArrayList<>();	
-		
-		String sql = "select * from model_login where upper(nome) like upper(?);";
+
+		List<ModelLogin> user = new ArrayList<>();
+
+		String sql = "select * from model_login where upper(nome) like upper(?) AND useradmin is false";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
-		pstm.setString(1, "%"+nome+"%");
+		pstm.setString(1, "%" + nome + "%");
 		ResultSet rs = pstm.executeQuery();
-		while(rs.next()) {
-			
+		while (rs.next()) {
+
 			ModelLogin modelLogin = new ModelLogin();
-			
+
 			modelLogin.setId(rs.getLong("id"));
 			modelLogin.setLogin(rs.getString("login"));
-			//modelLogin.setSenha(rs.getString("senha"));
+			// modelLogin.setSenha(rs.getString("senha"));
 			modelLogin.setNome(rs.getString("nome"));
 			modelLogin.setEmail(rs.getString("email"));
-			
+
 			user.add(modelLogin);
 		}
 		connection.commit();
-		
+
 		return user;
 
 	}
-	
+
+	public List<ModelLogin> listarUsers() throws Exception {
+
+		List<ModelLogin> user = new ArrayList<>();
+
+		String sql = "select * from model_login Where useradmin is false ORDER BY id ASC";
+
+		PreparedStatement pstm = connection.prepareStatement(sql);
+		ResultSet rs = pstm.executeQuery();
+		while (rs.next()) {
+
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setId(rs.getLong("id"));
+			modelLogin.setLogin(rs.getString("login"));
+			// modelLogin.setSenha(rs.getString("senha"));
+			modelLogin.setNome(rs.getString("nome"));
+			modelLogin.setEmail(rs.getString("email"));
+
+			user.add(modelLogin);
+		}
+		connection.commit();
+
+		return user;
+
+	}
+
 }
