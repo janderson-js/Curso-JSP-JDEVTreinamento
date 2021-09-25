@@ -17,10 +17,10 @@ public class DAOUsuarioRepository {
 		connection = SingleConnectionBanco.getConnection();
 	}
 
-	public ModelLogin gravarUsuario(ModelLogin modelLogin) throws Exception {
+	public ModelLogin gravarUsuario(ModelLogin modelLogin, Long userlogado) throws Exception {
 
 		if (modelLogin.isNovo()) {
-			String sql = "INSERT INTO model_login (login, senha, nome, email) VALUES (?,?,?,?)";
+			String sql = "INSERT INTO model_login (login, senha, nome, email, usuario_id) VALUES (?,?,?,?,?)";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 
@@ -28,7 +28,7 @@ public class DAOUsuarioRepository {
 			pstm.setString(2, modelLogin.getSenha());
 			pstm.setString(3, modelLogin.getNome());
 			pstm.setString(4, modelLogin.getEmail());
-
+			pstm.setLong(5, userlogado);
 			pstm.execute();
 			connection.commit();
 		} else {
@@ -46,10 +46,32 @@ public class DAOUsuarioRepository {
 
 		}
 
-		return this.consultarUsuario(modelLogin.getLogin());
+		return this.consultarUsuario(modelLogin.getLogin(), userlogado);
 
 	}
+	
+	public ModelLogin consultarUsuarioLogado(String login) throws Exception {
+		ModelLogin modelLogin = new ModelLogin();
+		String sql = "Select * from model_login WHERE upper(login)=upper(?)";
 
+		PreparedStatement pstm = connection.prepareStatement(sql);
+		pstm.setString(1, login);
+		ResultSet rs = pstm.executeQuery();
+		if (rs.next()) {
+
+			modelLogin.setId(rs.getLong("id"));
+			modelLogin.setLogin(rs.getString("login"));
+			modelLogin.setSenha(rs.getString("senha"));
+			modelLogin.setNome(rs.getString("nome"));
+			modelLogin.setEmail(rs.getString("email"));
+
+		}
+		connection.commit();
+
+		return modelLogin;
+
+	}
+	
 	public ModelLogin consultarUsuario(String login) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
 		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false";
@@ -72,12 +94,36 @@ public class DAOUsuarioRepository {
 
 	}
 
-	public ModelLogin consultarIdUsuario(String id) throws Exception {
+	public ModelLogin consultarUsuario(String login, Long userLogado) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
-		String sql = "Select * from model_login WHERE id=? AND useradmin is false";
+		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false AND usuario_id=?";
+
+		PreparedStatement pstm = connection.prepareStatement(sql);
+		pstm.setString(1, login);
+		pstm.setLong(2, userLogado);
+		ResultSet rs = pstm.executeQuery();
+		if (rs.next()) {
+
+			modelLogin.setId(rs.getLong("id"));
+			modelLogin.setLogin(rs.getString("login"));
+			modelLogin.setSenha(rs.getString("senha"));
+			modelLogin.setNome(rs.getString("nome"));
+			modelLogin.setEmail(rs.getString("email"));
+
+		}
+		connection.commit();
+
+		return modelLogin;
+
+	}
+
+	public ModelLogin consultarIdUsuario(String id, Long userLogado) throws Exception {
+		ModelLogin modelLogin = new ModelLogin();
+		String sql = "Select * from model_login WHERE id=? AND useradmin is false AND usuario_id=?";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setLong(1, Long.parseLong(id));
+		pstm.setLong(2, userLogado);
 		ResultSet rs = pstm.executeQuery();
 		if (rs.next()) {
 
@@ -120,14 +166,15 @@ public class DAOUsuarioRepository {
 		connection.commit();
 	}
 
-	public List<ModelLogin> buscarUser(String nome) throws Exception {
+	public List<ModelLogin> buscarUser(String nome, Long userLogado) throws Exception {
 
 		List<ModelLogin> user = new ArrayList<>();
 
-		String sql = "select * from model_login where upper(nome) like upper(?) AND useradmin is false";
+		String sql = "select * from model_login where upper(nome) like upper(?) AND useradmin is false AND usuario_id = ?";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setString(1, "%" + nome + "%");
+		pstm.setLong(2, userLogado);
 		ResultSet rs = pstm.executeQuery();
 		while (rs.next()) {
 
@@ -147,13 +194,14 @@ public class DAOUsuarioRepository {
 
 	}
 
-	public List<ModelLogin> listarUsers() throws Exception {
+	public List<ModelLogin> listarUsers(Long userLogado) throws Exception {
 
 		List<ModelLogin> user = new ArrayList<>();
 
-		String sql = "select * from model_login Where useradmin is false ORDER BY id ASC";
+		String sql = "select * from model_login Where usuario_id=? AND useradmin is false ORDER BY id ASC";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
+		pstm.setLong(1, userLogado);
 		ResultSet rs = pstm.executeQuery();
 		while (rs.next()) {
 
