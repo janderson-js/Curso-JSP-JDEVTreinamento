@@ -1,7 +1,7 @@
 package Servlets;
 
-import java.awt.SystemColor;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelLogin;
 
-@WebServlet("/servletUsuarioController")
+@WebServlet(urlPatterns = {"/servletUsuarioController"})
 public class ServletUsuarioController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -36,11 +36,15 @@ public class ServletUsuarioController extends HttpServlet {
 				String idUser = request.getParameter("id");
 
 				daoUser.deletarUser(idUser);
+				
+				List<ModelLogin> modelLogins  = daoUser.listarUsers();
+				request.setAttribute("modelLogins", modelLogins);
+				request.setAttribute("load", "Usuários carregados");
 
 				request.setAttribute("msg", "Excluido com sucesso!!");
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 
-			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletarAjax")) {
+			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletarAjax")) {
 
 				String idUser = request.getParameter("id");
 
@@ -59,7 +63,32 @@ public class ServletUsuarioController extends HttpServlet {
 				
 				response.getWriter().write(json);
 								
+			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarEditar")) {
+
+				String id = request.getParameter("id");
+
+				ModelLogin modelLogin =  daoUser.consultarIdUsuario(id);
+				
+				List<ModelLogin> modelLogins  = daoUser.listarUsers();
+				request.setAttribute("modelLogins", modelLogins);
+				request.setAttribute("load", "Usuários carregados");
+									
+				request.setAttribute("msg", "Usuário em Edição");
+				request.setAttribute("modelLogin", modelLogin);
+				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+								
+			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("listarUser")){
+				
+				List<ModelLogin> modelLogins  = daoUser.listarUsers();
+				
+				request.setAttribute("load", "Usuário carregados");
+				request.setAttribute("modelLogins", modelLogins);
+				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+				
 			}else {
+				List<ModelLogin> modelLogins  = daoUser.listarUsers();
+				request.setAttribute("modelLogins", modelLogins);
+				request.setAttribute("load", "Usuários carregados");
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 			}
 
@@ -107,6 +136,10 @@ public class ServletUsuarioController extends HttpServlet {
 
 				modelLogin = daoUser.gravarUsuario(modelLogin);
 			}
+			
+			List<ModelLogin> modelLogins  = daoUser.listarUsers();
+			request.setAttribute("modelLogins", modelLogins);
+			request.setAttribute("load", "Usuários carregados");
 
 			request.setAttribute("msg", msg);
 			request.setAttribute("modelLogin", modelLogin);

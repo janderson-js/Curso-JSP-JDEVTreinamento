@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %> 
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -79,6 +80,33 @@
 														</form>
 													</div>
 												</div>
+												<div style="height: 450px; overflow: scroll; background-color: white;">
+													<h4>${load}</h4>
+													<table class="table" id="tabelaResultadosView">
+														<thead>
+															<tr>
+																<th scope="col">ID</th>
+																<th scope="col">Nome</th>
+																<th scope="col">Ver</th>
+															</tr>
+														</thead>
+														<tbody>
+															<c:forEach items="${modelLogins}" var="ml">
+																<tr>
+																	<td>
+																		<c:out value="${ml.id}"></c:out>
+																	</td>																
+																	<td>
+																		<c:out value="${ml.nome}"></c:out>
+																	</td>																
+																	<td>
+																		<a class="btn btn-success" href="<%= request.getContextPath()%>/ServletUsuarioController?acao=buscarEditar&id=${ml.id}">ver</a>
+																	</td>
+																</tr>
+															</c:forEach>	
+														</tbody>
+													</table>						
+												</div>
 												<!-- Page-body end -->
 											</div>
 											<div id="styleSelector"></div>
@@ -117,19 +145,21 @@
 						</div>
 					</div>
 
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">ID</th>
-								<th scope="col">Nome</th>
-								<th scope="col">Ver</th>
-							</tr>
-						</thead>
-						<tbody>
+					<div style="height: 450px; overflow: scroll;">
+						<table class="table" id="tabelaResultados">
+							<thead>
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">Nome</th>
+									<th scope="col">Ver</th>
+								</tr>
+							</thead>
+							<tbody>
 
-						</tbody>
-					</table>
-
+							</tbody>
+						</table>						
+					</div>
+					<span id="resultados"></span>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
@@ -141,30 +171,45 @@
 
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
+	
+		function verEditar(id) {
+			var urlAction = document.getElementById('FormUser').action;
+			
+			window.location.href = urlAction + '?acao=buscarEditar&id='+id;
+		}
+	
 		function buscarUser() {
 
 			var nomeBuscar = document.getElementById('nomeBuscar').value;
-			
 
-			if (nomeBuscar != null && nomeBuscar != '' && nomeBuscar.trim() != '') {
-				
+			if (nomeBuscar != null && nomeBuscar != ''
+					&& nomeBuscar.trim() != '') {
+
 				var urlAction = document.getElementById('FormUser').action;
 
 				$.ajax({
-
 					method : "get",
 					url : urlAction,
-					data : "nomeBuscar=" + nomeBuscar + "&acao=buscarUserAjax",
+					data : "nomeBuscar=" + nomeBuscar+ "&acao=buscarUserAjax",
 					success : function(response) {
+
+						var json = JSON.parse(response);
+
+						$('#tabelaResultados > tbody > tr').remove();
+
+						for (var p = 0; p < json.length; p++) {
+							$('#tabelaResultados > tbody').append('<tr><td>'+ json[p].id+ '</td><td>'+ json[p].nome+ '</td>'
+											+ '<td> <button type="button" class="btn btn-primary" onclick="verEditar('+json[p].id+')">info</button> </td></tr>');
+						}
 						
-						
+						document.getElementById('resultados').textContent = 'Resultados: '+json.length;
 						
 					}
 
 				}).fail(
 					function(xhr, status, errorThrown) {
 						alert('Erro ao buscar usuario por nome:'+ xhr.responseText);
-				});
+					});
 			}
 
 		}
