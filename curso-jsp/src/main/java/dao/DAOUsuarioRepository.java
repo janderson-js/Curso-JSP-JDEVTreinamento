@@ -64,6 +64,7 @@ public class DAOUsuarioRepository {
 			modelLogin.setSenha(rs.getString("senha"));
 			modelLogin.setNome(rs.getString("nome"));
 			modelLogin.setEmail(rs.getString("email"));
+			modelLogin.setUserAdmin(rs.getBoolean("useradmin"));
 
 		}
 		connection.commit();
