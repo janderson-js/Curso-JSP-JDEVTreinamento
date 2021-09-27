@@ -81,6 +81,12 @@
 																	value="${modelLogin.senha}"> <span
 																	class="form-bar"></span> <label class="float-label">Senha:</label>
 															</div>
+															
+															<div class="form-group form-default form-static-label">
+																<span>Sexo:</span></br>												
+																<input type="radio" name="sexo" checked="checked" id="sexo" value="MASCULINO" <%if(modelLogin != null && !modelLogin.getSexo().equals(null) &&  modelLogin.getSexo().equals("MASCULINO")){out.print(" checked ");}%>>Masculino</>
+																<input type="radio" name="sexo" id="sexo" value="FEMININO" <%if(modelLogin != null  && !modelLogin.getSexo().equals(null) && modelLogin.getSexo().equals("FEMININO")){out.print(" checked ");}%>>Feminino</>
+															</div>
 															<button type="button"
 																class="btn btn-primary waves-effect waves-light"
 																onclick="limarForm();">Novo</button>
@@ -92,33 +98,35 @@
 																data-toggle="modal" data-target="#ModalUsuario">Pesquisar</button>
 														</form>
 													</div>
-												</div>
-												<div style="height: 450px; overflow: scroll; background-color: white;">
-													<h4>${load}</h4>
-													<table class="table" id="tabelaResultadosView">
-														<thead>
-															<tr>
-																<th scope="col">ID</th>
-																<th scope="col">Nome</th>
-																<th scope="col">Ver</th>
-															</tr>
-														</thead>
-														<tbody>
-															<c:forEach items="${modelLogins}" var="ml">
+												</div>												
+												<div class="card"  style="overflow: scroll; height: 500px;">
+													<div class="card-block">
+														<h2>${load}</h2>
+														<table class="table" id="tabelaResultadosView">
+															<thead>
 																<tr>
-																	<td>
-																		<c:out value="${ml.id}"></c:out>
-																	</td>																
-																	<td>
-																		<c:out value="${ml.nome}"></c:out>
-																	</td>																
-																	<td>
-																		<a class="btn btn-success" href="<%= request.getContextPath()%>/ServletUsuarioController?acao=buscarEditar&id=${ml.id}">ver</a>
-																	</td>
+																	<th scope="col">ID</th>
+																	<th scope="col">Nome</th>
+																	<th scope="col">Ver</th>
 																</tr>
-															</c:forEach>	
-														</tbody>
-													</table>						
+															</thead>
+															<tbody>
+																<c:forEach items="${modelLogins}" var="ml">
+																	<tr>
+																		<td>
+																			<c:out value="${ml.id}"></c:out>
+																		</td>																
+																		<td>
+																			<c:out value="${ml.nome}"></c:out>
+																		</td>																
+																		<td>
+																			<a class="btn btn-success" href="<%= request.getContextPath()%>/ServletUsuarioController?acao=buscarEditar&id=${ml.id}">ver</a>
+																		</td>
+																	</tr>
+																</c:forEach>	
+															</tbody>
+														</table>														
+													</div> 																			
 												</div>
 												<!-- Page-body end -->
 											</div>

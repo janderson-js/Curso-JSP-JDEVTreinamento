@@ -115,6 +115,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			String senha = request.getParameter("senha");
 			String id = request.getParameter("id");
 			String perfil = request.getParameter("perfil");
+			String sexo[] = request.getParameterValues("sexo");
 			String msg = "operação realizado com sucesso!!!";
 
 			ModelLogin modelLogin = new ModelLogin();
@@ -125,6 +126,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			modelLogin.setEmail(email);
 			modelLogin.setSenha(senha);
 			modelLogin.setPerfil(perfil);
+			modelLogin.setSexo(sexo[0]);
 			
 
 			if (daoUser.validarLogin(modelLogin.getLogin()) && modelLogin.getId() == null) {
