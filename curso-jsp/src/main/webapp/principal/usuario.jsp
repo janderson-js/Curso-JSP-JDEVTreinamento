@@ -1,3 +1,4 @@
+<%@page import="model.ModelLogin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %> 
@@ -44,29 +45,47 @@
 																	value="${modelLogin.id}" readonly="readonly"> <span
 																	class="form-bar"></span> <label class="float-label">Id:</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label">
 																<input type="text" name="nome" id="nome"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.nome}"> <span
 																	class="form-bar"></span> <label class="float-label">Nome:</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label">
 																<input type="email" name="email" id="email"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.email}"> <span
 																	class="form-bar"></span> <label class="float-label">E-mail:</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label" >
+																 <select class="form-control" name="perfil" aria-label="Default select example"  >
+																	  <option disabled>Selecione o Perfil...</option>
+																	  <% 
+																	  	ModelLogin modelLogin = (ModelLogin) request.getAttribute("modelLogin");
+																	  %>
+																	  <option value="ADMIN" <%if(modelLogin != null && modelLogin.getPerfil().equals("ADMIN")){out.print(" selected ");}%>>ADMIN</option>
+																	  <option value="SECRETARIA" <%if(modelLogin != null && modelLogin.getPerfil().equals("SECRETARIA")){out.print(" selected ");}%>>SECRETÁRIA</option>
+																	  <option value="AUXILIAR" <%if(modelLogin != null && modelLogin.getPerfil().equals("AUXILIAR")){out.print(" selected ");}%>>AUXILÍAR</option>
+																</select>																
+																<span class="form-bar"></span> <label class="float-label">Perfil:</label>															 
+															</div>
+															<div class="form-group form-default form-static-label">
 																<input type="text" name="login" id="login"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.login}"> <span
 																	class="form-bar"></span> <label class="float-label">Login:</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label">
 																<input type="password" name="senha" id="senha"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.senha}"> <span
 																	class="form-bar"></span> <label class="float-label">Senha:</label>
+															</div>
+															
+															<div class="form-group form-default form-static-label">
+																<span>Sexo:</span></br>												
+																<input type="radio" name="sexo" checked="checked" id="sexo" value="MASCULINO" <%if(modelLogin != null && !modelLogin.getSexo().equals(null) &&  modelLogin.getSexo().equals("MASCULINO")){out.print(" checked ");}%>>Masculino</>
+																<input type="radio" name="sexo" id="sexo" value="FEMININO" <%if(modelLogin != null  && !modelLogin.getSexo().equals(null) && modelLogin.getSexo().equals("FEMININO")){out.print(" checked ");}%>>Feminino</>
 															</div>
 															<button type="button"
 																class="btn btn-primary waves-effect waves-light"
@@ -79,33 +98,35 @@
 																data-toggle="modal" data-target="#ModalUsuario">Pesquisar</button>
 														</form>
 													</div>
-												</div>
-												<div style="height: 450px; overflow: scroll; background-color: white;">
-													<h4>${load}</h4>
-													<table class="table" id="tabelaResultadosView">
-														<thead>
-															<tr>
-																<th scope="col">ID</th>
-																<th scope="col">Nome</th>
-																<th scope="col">Ver</th>
-															</tr>
-														</thead>
-														<tbody>
-															<c:forEach items="${modelLogins}" var="ml">
+												</div>												
+												<div class="card"  style="overflow: scroll; height: 500px;">
+													<div class="card-block">
+														<h2>${load}</h2>
+														<table class="table" id="tabelaResultadosView">
+															<thead>
 																<tr>
-																	<td>
-																		<c:out value="${ml.id}"></c:out>
-																	</td>																
-																	<td>
-																		<c:out value="${ml.nome}"></c:out>
-																	</td>																
-																	<td>
-																		<a class="btn btn-success" href="<%= request.getContextPath()%>/ServletUsuarioController?acao=buscarEditar&id=${ml.id}">ver</a>
-																	</td>
+																	<th scope="col">ID</th>
+																	<th scope="col">Nome</th>
+																	<th scope="col">Ver</th>
 																</tr>
-															</c:forEach>	
-														</tbody>
-													</table>						
+															</thead>
+															<tbody>
+																<c:forEach items="${modelLogins}" var="ml">
+																	<tr>
+																		<td>
+																			<c:out value="${ml.id}"></c:out>
+																		</td>																
+																		<td>
+																			<c:out value="${ml.nome}"></c:out>
+																		</td>																
+																		<td>
+																			<a class="btn btn-success" href="<%= request.getContextPath()%>/ServletUsuarioController?acao=buscarEditar&id=${ml.id}">ver</a>
+																		</td>
+																	</tr>
+																</c:forEach>	
+															</tbody>
+														</table>														
+													</div> 																			
 												</div>
 												<!-- Page-body end -->
 											</div>
