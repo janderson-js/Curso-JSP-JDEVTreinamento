@@ -44,25 +44,34 @@
 																	value="${modelLogin.id}" readonly="readonly"> <span
 																	class="form-bar"></span> <label class="float-label">Id:</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label">
 																<input type="text" name="nome" id="nome"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.nome}"> <span
 																	class="form-bar"></span> <label class="float-label">Nome:</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label">
 																<input type="email" name="email" id="email"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.email}"> <span
 																	class="form-bar"></span> <label class="float-label">E-mail:</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label" >
+																 <select class="form-control" name="perfil" aria-label="Default select example"  >
+																	  <option disabled>Selecione o Perfil...</option>
+																	  <option value="ADMIN">ADMIN</option>
+																	  <option value="SECRETARIA">SECRETÁRIA</option>
+																	  <option value="AUXILIAR">AUXILÍAR</option>
+																</select>																
+																<span class="form-bar"></span> <label class="float-label">Perfil:</label>															 
+															</div>
+															<div class="form-group form-default form-static-label">
 																<input type="text" name="login" id="login"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.login}"> <span
 																	class="form-bar"></span> <label class="float-label">Login:</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label">
 																<input type="password" name="senha" id="senha"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.senha}"> <span
