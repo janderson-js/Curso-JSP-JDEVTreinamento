@@ -90,6 +90,7 @@ public class DAOUsuarioRepository {
 			modelLogin.setSenha(rs.getString("senha"));
 			modelLogin.setNome(rs.getString("nome"));
 			modelLogin.setEmail(rs.getString("email"));
+			modelLogin.setPerfil(rs.getString("perfil"));
 
 		}
 		connection.commit();
@@ -113,6 +114,7 @@ public class DAOUsuarioRepository {
 			modelLogin.setSenha(rs.getString("senha"));
 			modelLogin.setNome(rs.getString("nome"));
 			modelLogin.setEmail(rs.getString("email"));
+			modelLogin.setPerfil(rs.getString("perfil"));
 
 		}
 		connection.commit();
@@ -136,6 +138,7 @@ public class DAOUsuarioRepository {
 			modelLogin.setSenha(rs.getString("senha"));
 			modelLogin.setNome(rs.getString("nome"));
 			modelLogin.setEmail(rs.getString("email"));
+			modelLogin.setPerfil(rs.getString("perfil"));
 
 		}
 		connection.commit();

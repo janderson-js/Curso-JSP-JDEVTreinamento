@@ -1,3 +1,4 @@
+<%@page import="model.ModelLogin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %> 
@@ -59,9 +60,12 @@
 															<div class="form-group form-default form-static-label" >
 																 <select class="form-control" name="perfil" aria-label="Default select example"  >
 																	  <option disabled>Selecione o Perfil...</option>
-																	  <option value="ADMIN">ADMIN</option>
-																	  <option value="SECRETARIA">SECRETÁRIA</option>
-																	  <option value="AUXILIAR">AUXILÍAR</option>
+																	  <% 
+																	  	ModelLogin modelLogin = (ModelLogin) request.getAttribute("modelLogin");
+																	  %>
+																	  <option value="ADMIN" <%if(modelLogin != null && modelLogin.getPerfil().equals("ADMIN")){out.print(" selected ");}%>>ADMIN</option>
+																	  <option value="SECRETARIA" <%if(modelLogin != null && modelLogin.getPerfil().equals("SECRETARIA")){out.print(" selected ");}%>>SECRETÁRIA</option>
+																	  <option value="AUXILIAR" <%if(modelLogin != null && modelLogin.getPerfil().equals("AUXILIAR")){out.print(" selected ");}%>>AUXILÍAR</option>
 																</select>																
 																<span class="form-bar"></span> <label class="float-label">Perfil:</label>															 
 															</div>
