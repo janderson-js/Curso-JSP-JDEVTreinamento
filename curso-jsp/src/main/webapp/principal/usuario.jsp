@@ -36,9 +36,24 @@
 													<div class="card-block">
 														<h2 class="title">Cad. Usuário</h2>
 														</br> <span id="msg">${msg}</span> </br> </br>
-														<form class="form-material" method="post" id="FormUser"
+														<form class="form-material" enctype="multipart/form-data" method="post" id="FormUser"
 															action="<%=request.getContextPath()%>/ServletUsuarioController">
 															<input type="hidden" name="acao" id="acao" value="">
+															
+															<div class="form-group form-default input-group mb-4">								
+																<div class="input-group-prepend">
+																	<c:if test="${modelLogin.fotoUser != '' && modelLogin.fotoUser != null}">
+																		<a href="<%= request.getContextPath()%>/servletUsuarioController?acao=downLoadFoto&id=${modelLogin.id}">
+																			<img alt="Imagem do Usuário" id="fotoembase64" src="${modelLogin.fotoUser}" width="70px">
+																		</a>
+																	</c:if>
+																	<c:if test="${modelLogin.fotoUser == '' || modelLogin.fotoUser == null}">
+																		<img alt="Imagem do Usuário" id="fotoembase64" src="assets/images/avatar-6.png" width="70px">
+																	</c:if>
+																</div>
+																<input type="file" name="filefoto" id="filefoto" accept="image/" onchange="visualizarImg('fotoembase64','filefoto');" class="form-contro-file"  style="margin-top:15px;margin-left: 5px;" >
+															</div>
+															
 															<div class="form-group form-default form-static-label">
 																<input type="text" name="id" id="id"
 																	class="form-control" autocomplete="off"
@@ -192,6 +207,23 @@
 
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
+	
+		function visualizarImg(fotoembase64, filefoto) {
+						
+			var preview = document.getElementById(fotoembase64);
+			var fileUser = document.getElementById(filefoto).files[0];
+			var reader = new FileReader();
+			
+			reader.onloadend = function(){
+				preview.src = reader.result;
+			}
+			
+			if(fileUser){
+				reader.readAsDataURL(fileUser);		
+			}else{
+				preview.src= '';
+			}
+		}
 	
 		function verEditar(id) {
 			var urlAction = document.getElementById('FormUser').action;

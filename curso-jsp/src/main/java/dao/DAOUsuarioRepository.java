@@ -33,6 +33,22 @@ public class DAOUsuarioRepository {
 			pstm.setString(7, modelLogin.getSexo());
 			pstm.execute();
 			connection.commit();
+			
+			if(modelLogin.getFotoUser() != null && !modelLogin.getFotoUser().isEmpty()) {
+				
+				sql = "update model_login set fotouser=? , extensaofotouser=? where login=?";
+				
+				PreparedStatement pstmFoto = connection.prepareStatement(sql);
+				
+				pstmFoto.setString(1, modelLogin.getFotoUser());
+				pstmFoto.setString(2, modelLogin.getExtensaoFotoUser());
+				pstmFoto.setString(3, modelLogin.getLogin());
+				
+				pstmFoto.executeUpdate();
+				
+				connection.commit();
+			}
+			
 		} else {
 			String sql = "UPDATE model_login SET login=?, senha=?, nome=?, email=?, perfil=?,sexo=? WHERE id = ?";
 
@@ -47,6 +63,21 @@ public class DAOUsuarioRepository {
 
 			pstm.executeUpdate();
 			connection.commit();
+			
+			if(modelLogin.getFotoUser() != null && !modelLogin.getFotoUser().isEmpty()) {
+				
+				sql = "update model_login set fotouser=? , extensaofotouser=? where id=?";
+				
+				PreparedStatement pstmFoto = connection.prepareStatement(sql);
+				
+				pstmFoto.setString(1, modelLogin.getFotoUser());
+				pstmFoto.setString(2, modelLogin.getExtensaoFotoUser());
+				pstmFoto.setLong(3, modelLogin.getId());
+				
+				pstmFoto.executeUpdate();
+				
+				connection.commit();
+			}
 
 		}
 
@@ -71,6 +102,8 @@ public class DAOUsuarioRepository {
 			modelLogin.setUserAdmin(rs.getBoolean("useradmin"));
 			modelLogin.setPerfil(rs.getString("perfil"));
 			modelLogin.setSexo(rs.getString("sexo"));
+			modelLogin.setFotoUser(rs.getString("fotouser"));
+			
 
 		}
 		connection.commit();
@@ -95,6 +128,7 @@ public class DAOUsuarioRepository {
 			modelLogin.setEmail(rs.getString("email"));
 			modelLogin.setPerfil(rs.getString("perfil"));
 			modelLogin.setSexo(rs.getString("sexo"));
+			modelLogin.setFotoUser(rs.getString("fotouser"));
 
 		}
 		connection.commit();
@@ -120,6 +154,7 @@ public class DAOUsuarioRepository {
 			modelLogin.setEmail(rs.getString("email"));
 			modelLogin.setPerfil(rs.getString("perfil"));
 			modelLogin.setSexo(rs.getString("sexo"));
+			modelLogin.setFotoUser(rs.getString("fotouser"));
 
 		}
 		connection.commit();
@@ -145,6 +180,8 @@ public class DAOUsuarioRepository {
 			modelLogin.setEmail(rs.getString("email"));
 			modelLogin.setPerfil(rs.getString("perfil"));
 			modelLogin.setSexo(rs.getString("sexo"));
+			modelLogin.setFotoUser(rs.getString("fotouser"));
+			modelLogin.setExtensaoFotoUser(rs.getString("extensaofotouser"));
 
 		}
 		connection.commit();
