@@ -139,9 +139,13 @@ public class ServletUsuarioController extends ServletGenericUtil {
 				Part part = request.getPart("filefoto");
 				
 				byte[] foto = IOUtils.toByteArray(part.getInputStream());
-				String  ImgBase64 = new Base64().encodeBase64String(foto);
-				System.out.println(ImgBase64);
+				String  ImgBase64 = "data:image/"+ part.getContentType().split("\\/")[1] + ";base64," + new Base64().encodeBase64String(foto);
+				
+				modelLogin.setFotoUser(ImgBase64);
+				modelLogin.setExtensaoFotoUser(part.getContentType().split("\\/")[1]);
 			}
+			
+			
 
 			if (daoUser.validarLogin(modelLogin.getLogin()) && modelLogin.getId() == null) {
 				msg = "Já existe um usuário com esse login!!! Por favor informe outro login!!";
