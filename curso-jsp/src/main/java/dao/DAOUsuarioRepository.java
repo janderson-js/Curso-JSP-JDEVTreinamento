@@ -126,7 +126,7 @@ public class DAOUsuarioRepository {
 	
 	public ModelLogin consultarUsuario(String login) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
-		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false";
+		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false limit 5";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setString(1, login);
@@ -151,7 +151,7 @@ public class DAOUsuarioRepository {
 
 	public ModelLogin consultarUsuario(String login, Long userLogado) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
-		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false AND usuario_id=?";
+		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false AND usuario_id=? limit 5";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setString(1, login);
@@ -268,12 +268,40 @@ public class DAOUsuarioRepository {
 		return user;
 
 	}
+	
+	public List<ModelLogin> listarUsersPaginado(Long userLogado, Integer offset) throws Exception {
+
+		List<ModelLogin> user = new ArrayList<>();
+
+		String sql = "select * from model_login Where usuario_id=? AND useradmin is false ORDER BY nome ASC offset ? limit 5";
+
+		PreparedStatement pstm = connection.prepareStatement(sql);
+		pstm.setLong(1, userLogado);
+		pstm.setInt(2, offset);
+		ResultSet rs = pstm.executeQuery();
+		while (rs.next()) {
+
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setId(rs.getLong("id"));
+			modelLogin.setLogin(rs.getString("login"));
+			// modelLogin.setSenha(rs.getString("senha"));
+			modelLogin.setNome(rs.getString("nome"));
+			modelLogin.setEmail(rs.getString("email"));
+
+			user.add(modelLogin);
+		}
+		connection.commit();
+
+		return user;
+
+	}
 
 	public List<ModelLogin> listarUsers(Long userLogado) throws Exception {
 
 		List<ModelLogin> user = new ArrayList<>();
 
-		String sql = "select * from model_login Where usuario_id=? AND useradmin is false ORDER BY id ASC";
+		String sql = "select * from model_login Where usuario_id=? AND useradmin is false ORDER BY id ASC offset 0 limit 5";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setLong(1, userLogado);
