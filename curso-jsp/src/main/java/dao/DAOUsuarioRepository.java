@@ -20,7 +20,7 @@ public class DAOUsuarioRepository {
 	public ModelLogin gravarUsuario(ModelLogin modelLogin, Long userlogado) throws Exception {
 
 		if (modelLogin.isNovo()) {
-			String sql = "INSERT INTO model_login (login, senha, nome, email, usuario_id, perfil, sexo) VALUES (?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO model_login (login, senha, nome, email, usuario_id, perfil, sexo, cep, cidade, bairro, uf, logradouro, numero) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 
@@ -31,6 +31,12 @@ public class DAOUsuarioRepository {
 			pstm.setLong(5, userlogado);
 			pstm.setString(6, modelLogin.getPerfil());
 			pstm.setString(7, modelLogin.getSexo());
+			pstm.setString(8, modelLogin.getCep());
+			pstm.setString(9, modelLogin.getCidade());
+			pstm.setString(10, modelLogin.getBairro());
+			pstm.setString(11, modelLogin.getUf());
+			pstm.setString(12, modelLogin.getLogradouro());
+			pstm.setString(13, modelLogin.getNumero());
 			pstm.execute();
 			connection.commit();
 			
@@ -50,7 +56,7 @@ public class DAOUsuarioRepository {
 			}
 			
 		} else {
-			String sql = "UPDATE model_login SET login=?, senha=?, nome=?, email=?, perfil=?,sexo=? WHERE id = ?";
+			String sql = "UPDATE model_login SET login=?, senha=?, nome=?, email=?, perfil=?, sexo=?, cep=?, cidade=?, bairro=?, uf=?, logradouro=?, numero=? WHERE id = ?";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			pstm.setString(1, modelLogin.getLogin());
@@ -59,7 +65,13 @@ public class DAOUsuarioRepository {
 			pstm.setString(4, modelLogin.getEmail());
 			pstm.setString(5, modelLogin.getPerfil());
 			pstm.setString(6, modelLogin.getSexo());
-			pstm.setLong(7, modelLogin.getId());
+			pstm.setString(7, modelLogin.getCep());
+			pstm.setString(8, modelLogin.getCidade());
+			pstm.setString(9, modelLogin.getBairro());
+			pstm.setString(10, modelLogin.getUf());
+			pstm.setString(11, modelLogin.getLogradouro());
+			pstm.setString(12, modelLogin.getNumero());
+			pstm.setLong(13, modelLogin.getId());
 
 			pstm.executeUpdate();
 			connection.commit();
@@ -155,6 +167,12 @@ public class DAOUsuarioRepository {
 			modelLogin.setPerfil(rs.getString("perfil"));
 			modelLogin.setSexo(rs.getString("sexo"));
 			modelLogin.setFotoUser(rs.getString("fotouser"));
+			modelLogin.setCep(rs.getString("cep"));
+			modelLogin.setCidade(rs.getString("cidade"));
+			modelLogin.setBairro(rs.getString("bairro"));
+			modelLogin.setUf(rs.getString("uf"));
+			modelLogin.setLogradouro(rs.getString("logradouro"));
+			modelLogin.setNumero(rs.getString("numero"));
 
 		}
 		connection.commit();
@@ -182,6 +200,12 @@ public class DAOUsuarioRepository {
 			modelLogin.setSexo(rs.getString("sexo"));
 			modelLogin.setFotoUser(rs.getString("fotouser"));
 			modelLogin.setExtensaoFotoUser(rs.getString("extensaofotouser"));
+			modelLogin.setCep(rs.getString("cep"));
+			modelLogin.setCidade(rs.getString("cidade"));
+			modelLogin.setBairro(rs.getString("bairro"));
+			modelLogin.setUf(rs.getString("uf"));
+			modelLogin.setLogradouro(rs.getString("logradouro"));
+			modelLogin.setNumero(rs.getString("numero"));
 
 		}
 		connection.commit();
