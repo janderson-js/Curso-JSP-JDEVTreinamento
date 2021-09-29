@@ -49,6 +49,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 				request.setAttribute("load", "Usuários carregados");
 
 				request.setAttribute("msg", "Excluido com sucesso!!");
+				request.setAttribute("totalPagina", daoUser.totalPagina(this.getUserLogado(request)));
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 
 			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletarAjax")) {
@@ -82,6 +83,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 									
 				request.setAttribute("msg", "Usuário em Edição");
 				request.setAttribute("modelLogin", modelLogin);
+				request.setAttribute("totalPagina", daoUser.totalPagina(this.getUserLogado(request)));
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 								
 			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("listarUser")){
@@ -90,6 +92,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 				
 				request.setAttribute("load", "Usuário carregados");
 				request.setAttribute("modelLogins", modelLogins);
+				request.setAttribute("totalPagina", daoUser.totalPagina(this.getUserLogado(request)));
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 				
 			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("downLoadFoto")){
@@ -107,6 +110,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 				List<ModelLogin> modelLogins  = daoUser.listarUsers(super.getUserLogado(request));
 				request.setAttribute("modelLogins", modelLogins);
 				request.setAttribute("load", "Usuários carregados");
+				request.setAttribute("totalPagina", daoUser.totalPagina(this.getUserLogado(request)));
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 			}
 
@@ -135,6 +139,12 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			String perfil = request.getParameter("perfil");
 			String sexo[] = request.getParameterValues("sexo");
 			String msg = "operação realizado com sucesso!!!";
+			String cep = request.getParameter("cep");
+			String cidade = request.getParameter("cidade");
+			String bairro = request.getParameter("bairro");
+			String uf = request.getParameter("uf");
+			String logradouro = request.getParameter("logradouro");
+			String numero = request.getParameter("numero");
 
 			ModelLogin modelLogin = new ModelLogin();
 
@@ -145,6 +155,12 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			modelLogin.setSenha(senha);
 			modelLogin.setPerfil(perfil);
 			modelLogin.setSexo(sexo[0]);
+			modelLogin.setCep(cep);
+			modelLogin.setCidade(cidade);
+			modelLogin.setBairro(bairro);
+			modelLogin.setUf(uf);
+			modelLogin.setLogradouro(logradouro);
+			modelLogin.setNumero(numero);
 			
 			if(ServletFileUpload.isMultipartContent(request)) {
 				Part part = request.getPart("filefoto");
@@ -179,6 +195,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 
 			request.setAttribute("msg", msg);
 			request.setAttribute("modelLogin", modelLogin);
+			request.setAttribute("totalPagina", daoUser.totalPagina(this.getUserLogado(request)));
 			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 
 		} catch (Exception e) {

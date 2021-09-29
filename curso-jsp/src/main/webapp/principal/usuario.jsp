@@ -1,5 +1,5 @@
 <%@page import="model.ModelLogin"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %> 
 
@@ -41,14 +41,14 @@
 															<input type="hidden" name="acao" id="acao" value="">
 															
 															<div class="form-group form-default input-group mb-4">								
-																<div class="input-group-prepend">
+																<div class="input-group-prepend" >
 																	<c:if test="${modelLogin.fotoUser != '' && modelLogin.fotoUser != null}">
 																		<a href="<%= request.getContextPath()%>/servletUsuarioController?acao=downLoadFoto&id=${modelLogin.id}">
-																			<img alt="Imagem do Usuário" id="fotoembase64" src="${modelLogin.fotoUser}" width="70px">
+																			<img alt="Imagem do Usuário" style="object-fit:cover;border-radius: 40px;" id="fotoembase64" src="${modelLogin.fotoUser}" width="70px">
 																		</a>
 																	</c:if>
 																	<c:if test="${modelLogin.fotoUser == '' || modelLogin.fotoUser == null}">
-																		<img alt="Imagem do Usuário" id="fotoembase64" src="assets/images/avatar-6.png" width="70px">
+																		<img alt="Imagem do Usuário" style="object-fit:cover;border-radius: 40px;" id="fotoembase64" src="assets/images/avatar-6.png" width="70px">
 																	</c:if>
 																</div>
 																<input type="file" name="filefoto" id="filefoto" accept="image/" onchange="visualizarImg('fotoembase64','filefoto');" class="form-contro-file"  style="margin-top:15px;margin-left: 5px;" >
@@ -84,6 +84,49 @@
 																</select>																
 																<span class="form-bar"></span> <label class="float-label">Perfil:</label>															 
 															</div>
+															
+															<div class="form-group form-default form-static-label">
+																<input onblur="pesquisarCep();" type="text" name="cep" id="cep"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.cep}"> <span
+																	class="form-bar"></span> <label class="float-label">CEP:</label>
+															</div>
+															
+															<div class="form-group form-default form-static-label">
+																<input type="text" name="cidade" id="cidade"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.cidade}"> <span
+																	class="form-bar"></span> <label class="float-label">Cidade:</label>
+															</div>
+															
+															<div class="form-group form-default form-static-label">
+																<input type="text" name="bairro" id="bairro"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.bairro}"> <span
+																	class="form-bar"></span> <label class="float-label">Bairro:</label>
+															</div>
+															
+															<div class="form-group form-default form-static-label">
+																<input type="text" name="uf" id="uf"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.uf}"> <span
+																	class="form-bar"></span> <label class="float-label">UF:</label>
+															</div>
+															
+															<div class="form-group form-default form-static-label">
+																<input type="text" name="logradouro" id="logradouro"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.logradouro}"> <span
+																	class="form-bar"></span> <label class="float-label">Logradouro:</label>
+															</div>
+															
+															<div class="form-group form-default form-static-label">
+																<input type="text" name="numero" id="numero"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.numero}"> <span
+																	class="form-bar"></span> <label class="float-label">Numero:</label>
+															</div>
+															
 															<div class="form-group form-default form-static-label">
 																<input type="text" name="login" id="login"
 																	class="form-control" required autocomplete="off"
@@ -207,6 +250,23 @@
 
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
+		
+		function pesquisarCep() {
+			var cep = $("#cep").val();
+			
+			$.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+				
+				if (!("erro" in dados)) {
+                    $("#cep").val(dados.cep);
+                    $("#logradouro").val(dados.logradouro);
+                    $("#bairro").val(dados.bairro);
+                    $("#cidade").val(dados.localidade);
+                    $("#uf").val(dados.uf);                    
+                }
+				
+			});
+		}
+	
 	
 		function visualizarImg(fotoembase64, filefoto) {
 						
