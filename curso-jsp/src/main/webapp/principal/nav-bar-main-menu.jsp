@@ -8,10 +8,13 @@
 	</div>
 	<div class="pcoded-inner-navbar main-menu">
 		<div class="">
-			<div class="main-menu-header">
-				<img class="img-80 img-radius"
-					src="<%=request.getContextPath()%>/assets/images/avatar-4.jpg"
-					alt="User-Profile-Image">
+			<div class="main-menu-header">				
+					<c:if test="${imgUser != '' && imgUser != null}">					
+						<img alt="Imagem do Usuário" class="img-80 img-radius" id="fotoembase64" src="${imgUser}" width="70px">
+					</c:if>
+					<c:if test="${imgUser == '' || imgUser == null}">
+						<img alt="Imagem do Usuário" class="img-80 img-radius" id="fotoembase64" src="assets/images/avatar-6.png" width="70px">
+					</c:if>
 				<div class="user-details">
 					<span id="more-details"><%=session.getAttribute("usuario")%><i
 						class="fa fa-caret-down"></i></span>
@@ -67,7 +70,7 @@
 								class="pcoded-mcaret"></span>
 						</a></li>
 					</c:if>
- 
+ 					<!--  
 					<li class=" "><a href="breadcrumb.html"
 						class="waves-effect waves-dark"> <span class="pcoded-micon"><i
 								class="ti-angle-right"></i></span> <span class="pcoded-mtext"
@@ -124,15 +127,9 @@
 					</a></li>
 
 				</ul></li>
+				-->
 		</ul>
-		<div class="pcoded-navigation-label" data-i18n="nav.category.forms">Relatórios</div>
-		<ul class="pcoded-item pcoded-left-item">
-			<li><a href="form-elements-component.html"
-				class="waves-effect waves-dark"> <span class="pcoded-micon"><i
-						class="ti-layers"></i><b>FC</b></span> <span class="pcoded-mtext"
-					data-i18n="nav.form-components.main">Usuários</span> <span
-					class="pcoded-mcaret"></span>
-			</a></li>
+		
 			<!-- 
 				<li><a href="bs-basic-table.html"
 				class="waves-effect waves-dark"> <span class="pcoded-micon"><i
@@ -142,7 +139,7 @@
 			</a></li>
 			 -->
 
-		</ul>
+
 	<!--  
 		<div class="pcoded-navigation-label" data-i18n="nav.category.forms">Chart
 			&amp; Maps</div>
@@ -223,8 +220,16 @@
 					</a></li>
 
 				</ul></li>
-					
+				-->	
 		</ul>
-		-->
+		<div class="pcoded-navigation-label" data-i18n="nav.category.forms">Relatórios</div>
+		<ul class="pcoded-item pcoded-left-item">
+			<li><a href="form-elements-component.html"
+				class="waves-effect waves-dark"> <span class="pcoded-micon"><i
+						class="ti-layers"></i><b>FC</b></span> <span class="pcoded-mtext"
+					data-i18n="nav.form-components.main">Usuários</span> <span
+					class="pcoded-mcaret"></span>
+			</a></li>
+		</ul>
 	</div>
 </nav>
