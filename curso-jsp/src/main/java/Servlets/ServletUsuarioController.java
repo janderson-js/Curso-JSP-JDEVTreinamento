@@ -69,9 +69,24 @@ public class ServletUsuarioController extends ServletGenericUtil {
 				ObjectMapper objectMapper = new ObjectMapper();
 				String json = objectMapper.writeValueAsString(dadosJsonUser);
 				
+				response.addHeader("totalPaginaAjax", ""+daoUser.buscarUserTotalPaginacao(nomeBuscar, super.getUserLogado(request)));
 				response.getWriter().write(json);
 								
-			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarEditar")) {
+			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarUserAjaxPage")) {
+				
+				String nomeBuscar = request.getParameter("nomeBuscar");
+				String pagina = request.getParameter("pagina");
+
+				List<ModelLogin> dadosJsonUser = daoUser.listarUsersPaginadoOffset(nomeBuscar,super.getUserLogado(request),Integer.parseInt(pagina));
+				
+				ObjectMapper objectMapper = new ObjectMapper();
+				String json = objectMapper.writeValueAsString(dadosJsonUser);
+				
+				response.addHeader("totalPaginaAjax", ""+daoUser.buscarUserTotalPaginacao(nomeBuscar, super.getUserLogado(request)));
+				response.getWriter().write(json);
+				
+				
+			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarEditar")) {			
 
 				String id = request.getParameter("id");
 
@@ -105,6 +120,17 @@ public class ServletUsuarioController extends ServletGenericUtil {
 						response.setHeader("Content-Disposition", "attachment;filename=arquivo."+ modelLogin.getExtensaoFotoUser());
 						response.getOutputStream().write(new Base64().decode(modelLogin.getFotoUser().split("\\,")[1]));
 				}
+				
+			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("paginar")){
+				
+				Integer offset = Integer.parseInt(request.getParameter("pagina"));
+				
+				List<ModelLogin> modelLogin = daoUser.listarUsersPaginado(this.getUserLogado(request), offset);
+				
+				request.setAttribute("modelLogins", modelLogin);
+				request.setAttribute("load", "Usuários carregados");
+				request.setAttribute("totalPagina", daoUser.totalPagina(this.getUserLogado(request)));
+				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 				
 			}else {
 				List<ModelLogin> modelLogins  = daoUser.listarUsers(super.getUserLogado(request));

@@ -240,11 +240,38 @@ public class DAOUsuarioRepository {
 		connection.commit();
 	}
 
+	public int buscarUserTotalPaginacao(String nome, Long userLogado) throws Exception {
+
+		String sql = "select count(1) as total from model_login where upper(nome) like upper(?) AND useradmin is false AND usuario_id = ?";
+
+		PreparedStatement pstm = connection.prepareStatement(sql);
+		pstm.setString(1, "%" + nome + "%");
+		pstm.setLong(2, userLogado);
+		ResultSet rs = pstm.executeQuery();
+		
+		rs.next();
+		
+		Double cadastro = rs.getDouble("total");
+		
+		Double porpagina = 5.0;
+		
+		Double pagina = cadastro / porpagina;
+		
+		Double resto = pagina % 2;
+		
+		if(resto > 1) {
+			pagina ++;
+		}
+		
+		return pagina.intValue();
+		
+	}
+	
 	public List<ModelLogin> buscarUser(String nome, Long userLogado) throws Exception {
 
 		List<ModelLogin> user = new ArrayList<>();
 
-		String sql = "select * from model_login where upper(nome) like upper(?) AND useradmin is false AND usuario_id = ?";
+		String sql = "select * from model_login where upper(nome) like upper(?) AND useradmin is false AND usuario_id = ? limit 5";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setString(1, "%" + nome + "%");
@@ -271,11 +298,13 @@ public class DAOUsuarioRepository {
 	
 	public int totalPagina(Long userLogado) throws Exception {
 		
-		String sql = "select count(1) as total from model_login where usuario_id=?";
+		String sql = "select count(1) as total from model_login where useradmin is false and usuario_id=?";
 		
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setLong(1, userLogado);		
 		ResultSet rs = pstm.executeQuery();
+		
+		rs.next();
 		
 		Double cadastro = rs.getDouble("total");
 		
@@ -285,11 +314,40 @@ public class DAOUsuarioRepository {
 		
 		Double resto = pagina % 2;
 		
-		if(resto > 0) {
+		if(resto > 1) {
 			pagina ++;
 		}
 		
 		return pagina.intValue();
+	}
+	
+	public List<ModelLogin> listarUsersPaginadoOffset(String nome,Long userLogado, int offset) throws Exception {
+
+		List<ModelLogin> user = new ArrayList<>();
+
+		String sql = "select * from model_login Where upper(nome) like upper(?) AND usuario_id=? AND useradmin is false ORDER BY nome ASC offset ? limit 5";
+
+		PreparedStatement pstm = connection.prepareStatement(sql);
+		pstm.setString(1,"%"+nome+"%");
+		pstm.setLong(2, userLogado);
+		pstm.setInt(3,offset);
+		ResultSet rs = pstm.executeQuery();
+		while (rs.next()) {
+
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setId(rs.getLong("id"));
+			modelLogin.setLogin(rs.getString("login"));
+			// modelLogin.setSenha(rs.getString("senha"));
+			modelLogin.setNome(rs.getString("nome"));
+			modelLogin.setEmail(rs.getString("email"));
+
+			user.add(modelLogin);
+		}
+		connection.commit();
+
+		return user;
+
 	}
 	
 	public List<ModelLogin> listarUsersPaginado(Long userLogado, Integer offset) throws Exception {

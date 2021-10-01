@@ -184,7 +184,22 @@
 																</c:forEach>	
 															</tbody>
 														</table>														
-													</div> 																			
+													</div>
+													<div class="d-flex justify-content-center">
+														<nav aria-label="Navegação de página exemplo">
+													  		<ul class="pagination">									  	
+															  	<%
+															  		int totalPagina = (int) request.getAttribute("totalPagina");
+															  		int ct = 0;
+															  		for(int p = 0; p < totalPagina; p++){
+															  			String url = request.getContextPath() + "/ServletUsuarioController?acao=paginar&pagina="+(p*5);
+														  			
+															  			out.print("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"\">"+(p+1)+"</a></li>");													  			
+															  		}
+															  	%>												  													    													   													    
+													  		</ul>
+														</nav> 
+													</div>																			
 												</div>
 												<!-- Page-body end -->
 											</div>
@@ -214,43 +229,50 @@
 				</div>
 				<div class="modal-body">
 
-					<div class="input-group mb-3">
-						<input type="text" class="form-control" placeholder="Nome"
-							id="nomeBuscar" aria-label="Recipient's username"
-							aria-describedby="basic-addon2">
-						<div class="input-group-append">
-							<button class="btn btn-success waves-effect waves-light"
-								type="button" onclick="buscarUser()">Pesquisar</button>
-						</div>
+				<div class="input-group mb-3">
+					<input type="text" class="form-control" placeholder="Nome"
+						id="nomeBuscar" aria-label="Recipient's username"
+						aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<button class="btn btn-success waves-effect waves-light"
+							type="button" onclick="buscarUser()">Pesquisar</button>
 					</div>
-
-					<div style="height: 450px; overflow: scroll;">
-						<table class="table" id="tabelaResultados">
-							<thead>
-								<tr>
-									<th scope="col">ID</th>
-									<th scope="col">Nome</th>
-									<th scope="col">Ver</th>
-								</tr>
-							</thead>
-							<tbody>
-
-							</tbody>
-						</table>						
-					</div>
-					<span id="resultados"></span>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Fechar</button>
+
+				<div style="height: 500px; overflow: scroll;">
+					<table class="table" id="tabelaResultados">
+						<thead>
+							<tr>
+								<th scope="col">ID</th>
+								<th scope="col">Nome</th>
+								<th scope="col">Ver</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>						
 				</div>
+				<div class="d-flex justify-content-center">
+					<nav aria-label="Navegação de página exemplo">
+						  <ul class="pagination" id="ulPaginacaoAjax">									  	
+								  									  													    													   													    
+						  </ul>
+					</nav> 
+				</div>																			
+			</div>
+			<span id="resultados"></span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+					data-dismiss="modal">Fechar</button>
 			</div>
 		</div>
 	</div>
 
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
-		
+		// Função para pesquisar o cep
 		function pesquisarCep() {
 			var cep = $("#cep").val();
 			
@@ -267,7 +289,7 @@
 			});
 		}
 	
-	
+		// Função para mostra o preview da foto para o usuário
 		function visualizarImg(fotoembase64, filefoto) {
 						
 			var preview = document.getElementById(fotoembase64);
@@ -284,13 +306,15 @@
 				preview.src= '';
 			}
 		}
-	
+		
+		// Função para editar o usuário
 		function verEditar(id) {
 			var urlAction = document.getElementById('FormUser').action;
 			
 			window.location.href = urlAction + '?acao=buscarEditar&id='+id;
 		}
-	
+		
+		// Função para buscar o usuário com ajax
 		function buscarUser() {
 
 			var nomeBuscar = document.getElementById('nomeBuscar').value;
@@ -304,19 +328,25 @@
 					method : "get",
 					url : urlAction,
 					data : "nomeBuscar=" + nomeBuscar+ "&acao=buscarUserAjax",
-					success : function(response) {
+					success : function(response, textStatus, xhr) {
 
 						var json = JSON.parse(response);
 
 						$('#tabelaResultados > tbody > tr').remove();
+						$("#ulPaginacaoAjax > li").remove();
 
 						for (var p = 0; p < json.length; p++) {
 							$('#tabelaResultados > tbody').append('<tr><td>'+ json[p].id+ '</td><td>'+ json[p].nome+ '</td>'
 											+ '<td> <button type="button" class="btn btn-primary" onclick="verEditar('+json[p].id+')">info</button> </td></tr>');
 						}
 						
-						document.getElementById('resultados').textContent = 'Resultados: '+json.length;
+									
+						var totalPaginaAjax = xhr.getResponseHeader("totalPaginaAjax");
 						
+						for(var p = 0;p < totalPaginaAjax; p++){
+							var url ="nomeBuscar="+ nomeBuscar + "&acao=buscarUserAjaxPage&pagina="+(p*5);
+							$("#ulPaginacaoAjax").append('<li class=\"page-item\"><a class=\"page-link\" href="#" onclick=buscarUserPagAjax(\''+ url +'\')>'+ (p+1) +'</a></li>');
+						}						
 					}
 
 				}).fail(
@@ -324,9 +354,53 @@
 						alert('Erro ao buscar usuario por nome:'+ xhr.responseText);
 					});
 			}
-
 		}
+		
+		// Função para buscar o usuário por pagina com ajax
+		function buscarUserPagAjax(url) {
+			
+			var urlAction = document.getElementById('FormUser').action;
+			var nomeBuscar = document.getElementById('nomeBuscar').value;
+			
+			$.ajax({
+				method : "get",
+				url : urlAction,
+				data : url,
+				success : function(response, textStatus, xhr) {
 
+					var json = JSON.parse(response);
+
+					$('#tabelaResultados > tbody > tr').remove();
+					$("#ulPaginacaoAjax > li").remove();
+
+					for (var p = 0; p < json.length; p++) {
+						$('#tabelaResultados > tbody').append('<tr><td>'+ json[p].id+ '</td><td>'+ json[p].nome+ '</td>'
+										+ '<td> <button type="button" class="btn btn-primary" onclick="verEditar('+json[p].id+')">info</button> </td></tr>');
+					}
+					
+								
+					var totalPaginaAjax = xhr.getResponseHeader("totalPaginaAjax");
+					
+					for(var p = 0;p < totalPaginaAjax; p++){
+						
+						var url ="nomeBuscar="+ nomeBuscar + "&acao=buscarUserAjaxPage&pagina="+(p*5);
+						
+						$("#ulPaginacaoAjax").append('<li class=\"page-item\"><a class=\"page-link\" href="#" onclick=buscarUserPagAjax(\''+ url +'\')>'+ (p+1) +'</a></li>');
+					}
+					
+					document.getElementById('resultados').textContent = 'Resultados: '+totalPaginaAjax;
+					
+				}
+
+			}).fail(
+				function(xhr, status, errorThrown) {
+					alert('Erro ao buscar usuario por nome:'+ xhr.responseText);
+				});
+		}
+		
+		
+		
+		// Função para deletar com ajax
 		function deleteComAjax() {
 			if (confirm('Deseja excluir?')) {
 
@@ -351,7 +425,7 @@
 
 			}
 		}
-
+		// Função para deletar o usuário sem o ajax
 		function deletar() {
 
 			if (confirm('Deseja excluir?')) {
@@ -361,7 +435,7 @@
 				document.getElementById("FormUser").submit();
 			}
 		}
-
+		// Função para limpar os campos do formulário
 		function limarForm() {
 			var elementos = document.getElementById("FormUser");
 
