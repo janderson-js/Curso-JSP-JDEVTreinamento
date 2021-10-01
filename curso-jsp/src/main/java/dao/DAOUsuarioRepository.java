@@ -148,6 +148,31 @@ public class DAOUsuarioRepository {
 		return modelLogin;
 
 	}
+	
+	public ModelLogin consultarUsuarioTelefone(Long id) throws Exception {
+		ModelLogin modelLogin = new ModelLogin();
+		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false limit 5";
+
+		PreparedStatement pstm = connection.prepareStatement(sql);
+		pstm.setLong(1, id);
+		ResultSet rs = pstm.executeQuery();
+		if (rs.next()) {
+
+			modelLogin.setId(rs.getLong("id"));
+			modelLogin.setLogin(rs.getString("login"));
+			modelLogin.setSenha(rs.getString("senha"));
+			modelLogin.setNome(rs.getString("nome"));
+			modelLogin.setEmail(rs.getString("email"));
+			modelLogin.setPerfil(rs.getString("perfil"));
+			modelLogin.setSexo(rs.getString("sexo"));
+			modelLogin.setFotoUser(rs.getString("fotouser"));
+
+		}
+		connection.commit();
+
+		return modelLogin;
+
+	}
 
 	public ModelLogin consultarUsuario(String login, Long userLogado) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
