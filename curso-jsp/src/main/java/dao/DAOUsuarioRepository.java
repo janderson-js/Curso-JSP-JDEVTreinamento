@@ -151,7 +151,7 @@ public class DAOUsuarioRepository {
 	
 	public ModelLogin consultarUsuarioTelefone(Long id) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
-		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false limit 5";
+		String sql = "Select * from model_login WHERE id = ? AND useradmin is false limit 5";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setLong(1, id);
