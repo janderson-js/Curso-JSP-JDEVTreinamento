@@ -152,8 +152,11 @@
 															<button type="button"
 																class="btn btn-danger waves-effect waves-light"
 																onclick="deleteComAjax();">Excluir</button>
+															<c:if test="${modelLogin.id > 0}">
+																<a href="<%=request.getContextPath()%>/ServletTelefone?idUser=${modelLogin.id}" class="btn btn-dark">Telefone</a>															
+															</c:if>
 															<button type="button" class="btn btn-info"
-																data-toggle="modal" data-target="#ModalUsuario">Pesquisar</button>
+																data-toggle="modal" data-target="#ModalUsuario">Pesquisar</button>														
 														</form>
 													</div>
 												</div>												
