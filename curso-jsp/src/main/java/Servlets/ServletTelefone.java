@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+import dao.DAOTelefoneRepository;
 import dao.DAOUsuarioRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelLogin;
+import model.ModelTelefone;
 import jakarta.servlet.annotation.WebServlet;
 
 @WebServlet("/servletTelefone")
@@ -17,6 +19,7 @@ public class ServletTelefone extends ServletGenericUtil  implements Serializable
 	private static final long serialVersionUID = 1L;
 	
 	private DAOUsuarioRepository daoUser = new DAOUsuarioRepository();
+	private DAOTelefoneRepository daoTel = new DAOTelefoneRepository();
  
     public ServletTelefone() {
  
@@ -24,14 +27,42 @@ public class ServletTelefone extends ServletGenericUtil  implements Serializable
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String idUser = request.getParameter("idUser");
+		
 		try {
+			String idUser = request.getParameter("idUser");
+			String acao = request.getParameter("acao");
+			
+			if(acao != null && !acao.isEmpty() && acao.equals("excluir")) {
+				String idTel = request.getParameter("id");
+				String idPai = request.getParameter("idPai");
+				daoTel.deletarTelefone(Long.parseLong(idTel));
+				
+				ModelLogin modelLogin = daoUser.consultarUsuarioTelefone(Long.parseLong(idPai));
+				
+				List<ModelTelefone> modelTelefones = daoTel.listaTelefoneUsers(modelLogin.getId());
+				
+				request.setAttribute("modelTelefones", modelTelefones);
+				request.setAttribute("load", "Telefones do Usuário");
+				
+				request.setAttribute("modelLogin", modelLogin);
+				request.getRequestDispatcher("principal/telefone.jsp").forward(request, response);
+				
+				return;
+			}
+			
 			if(idUser != null && !idUser.isEmpty()) {
 			
 				ModelLogin modelLogin = daoUser.consultarUsuarioTelefone(Long.parseLong(idUser));
 				
-				request.setAttribute("usuario", modelLogin);
+				List<ModelTelefone> modelTelefones = daoTel.listaTelefoneUsers(modelLogin.getId());
+				
+				request.setAttribute("modelTelefones", modelTelefones);
+				request.setAttribute("load", "Telefones do Usuário");
+				
+				request.setAttribute("modelLogin", modelLogin);
 				request.getRequestDispatcher("principal/telefone.jsp").forward(request, response);
+				
+				
 								
 			}else {
 				List<ModelLogin> modelLogins  = daoUser.listarUsers(super.getUserLogado(request));
@@ -46,7 +77,32 @@ public class ServletTelefone extends ServletGenericUtil  implements Serializable
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
+		try {
+			
+			String usuario_pai_id = request.getParameter("id");
+			String numero = request.getParameter("numero");
+			
+			ModelTelefone modelTelefone = new ModelTelefone();
+			
+			modelTelefone.setUsuarioPaiId(daoUser.consultarUsuarioTelefone(Long.parseLong(usuario_pai_id)));
+			modelTelefone.setNumero(numero);
+			modelTelefone.setUsuarioCadId(super.getUserLogadoObj(request));
+			
+			daoTel.gravaTelefone(modelTelefone);
+			
+			List<ModelTelefone> modelTelefones = daoTel.listaTelefoneUsers(Long.parseLong(usuario_pai_id));
+			ModelLogin modelLogin = daoUser.consultarUsuarioTelefone(Long.parseLong(usuario_pai_id));
+			
+			request.setAttribute("modelLogin", modelLogin);
+			request.setAttribute("modelTelefones", modelTelefones);
+			request.setAttribute("load", "Números do usuário!!");
+			request.setAttribute("msg", "salvo com sucesso!!");
+			request.getRequestDispatcher("principal/telefone.jsp").forward(request, response);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

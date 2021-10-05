@@ -45,7 +45,7 @@ public class DAOTelefoneRepository {
 		connection.commit();
 	}
 	
-	public List<ModelTelefone> listaTelefoneUser(Long idUserPai) throws Exception{
+	public List<ModelTelefone> listaTelefoneUsers(Long idUserPai) throws Exception{
 		
 		List<ModelTelefone> telefones = new ArrayList<ModelTelefone>();
 		DAOUsuarioRepository daoUser = new DAOUsuarioRepository();

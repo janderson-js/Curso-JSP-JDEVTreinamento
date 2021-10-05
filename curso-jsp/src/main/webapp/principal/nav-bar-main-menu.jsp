@@ -10,10 +10,10 @@
 		<div class="">
 			<div class="main-menu-header">				
 					<c:if test="${imgUser != '' && imgUser != null}">					
-						<img alt="Imagem do Usuário" class="img-80 img-radius" id="fotoembase64" src="${imgUser}" width="70px">
+						<img alt="Imagem do Usuário" class="img-80 img-radius"  src="${imgUser}" width="70px">
 					</c:if>
 					<c:if test="${imgUser == '' || imgUser == null}">
-						<img alt="Imagem do Usuário" class="img-80 img-radius" id="fotoembase64" src="assets/images/avatar-6.png" width="70px">
+						<img alt="Imagem do Usuário" class="img-80 img-radius"  src="assets/images/avatar-6.png" width="70px">
 					</c:if>
 				<div class="user-details">
 					<span id="more-details"><%=session.getAttribute("usuario")%><i

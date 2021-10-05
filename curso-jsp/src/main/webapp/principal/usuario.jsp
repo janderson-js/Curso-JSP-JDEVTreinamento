@@ -162,7 +162,7 @@
 												</div>												
 												<div class="card"  style="overflow: scroll; height: 500px;">
 													<div class="card-block">
-														<h2>${load}</h2>
+														<h2 class="title">${load}</h2>
 														<table class="table" id="tabelaResultadosView">
 															<thead>
 																<tr>
