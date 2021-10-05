@@ -275,6 +275,15 @@
 
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
+	
+		$("#numero").keypress(function (event) {
+			return /\d/.test(String.fromCharCode(event.keyCode));
+		});
+		
+		$("#cep").keypress(function (event) {
+			return /\d/.test(String.fromCharCode(event.keyCode));
+		});
+	
 		// Função para pesquisar o cep
 		function pesquisarCep() {
 			var cep = $("#cep").val();
