@@ -67,6 +67,12 @@
 																	class="form-bar"></span> <label class="float-label">Nome:</label>
 															</div>
 															<div class="form-group form-default form-static-label">
+																<input type="tex" name="dataNascimento" id="dataNascimento"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.dataNascimento}"> <span
+																	class="form-bar"></span> <label class="float-label">Data de Nascimento:</label>
+															</div>
+															<div class="form-group form-default form-static-label">
 																<input type="email" name="email" id="email"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.email}"> <span
@@ -162,7 +168,7 @@
 												</div>												
 												<div class="card"  style="overflow: scroll; height: 500px;">
 													<div class="card-block">
-														<h2>${load}</h2>
+														<h2 class="title">${load}</h2>
 														<table class="table" id="tabelaResultadosView">
 															<thead>
 																<tr>
@@ -275,6 +281,29 @@
 
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
+	// calendario jquery
+		$( function() {
+			  
+			  $("#dataNascimento").datepicker({
+				    dateFormat: 'dd/mm/yy',
+				    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+				    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+				    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+				    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+				    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+				    nextText: 'Próximo',
+				    prevText: 'Anterior'
+				});
+		} );
+	// aceitar apenas números.
+		$("#numero").keypress(function (event) {
+			return /\d/.test(String.fromCharCode(event.keyCode));
+		});
+		
+		$("#cep").keypress(function (event) {
+			return /\d/.test(String.fromCharCode(event.keyCode));
+		});
+	
 		// Função para pesquisar o cep
 		function pesquisarCep() {
 			var cep = $("#cep").val();

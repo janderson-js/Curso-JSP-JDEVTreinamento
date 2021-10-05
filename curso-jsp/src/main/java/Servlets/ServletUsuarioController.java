@@ -1,7 +1,9 @@
 package Servlets;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.tomcat.jakartaee.commons.compress.utils.IOUtils;
@@ -171,6 +173,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			String uf = request.getParameter("uf");
 			String logradouro = request.getParameter("logradouro");
 			String numero = request.getParameter("numero");
+			String dataNascimento = request.getParameter("dataNascimento");
 
 			ModelLogin modelLogin = new ModelLogin();
 
@@ -187,6 +190,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			modelLogin.setUf(uf);
 			modelLogin.setLogradouro(logradouro);
 			modelLogin.setNumero(numero);
+			modelLogin.setDataNascimento(new java.sql.Date(new SimpleDateFormat("dd/mm/yyyy").parse(dataNascimento).getTime()));
 			
 			if(ServletFileUpload.isMultipartContent(request)) {
 				Part part = request.getPart("filefoto");

@@ -20,7 +20,7 @@ public class DAOUsuarioRepository {
 	public ModelLogin gravarUsuario(ModelLogin modelLogin, Long userlogado) throws Exception {
 
 		if (modelLogin.isNovo()) {
-			String sql = "INSERT INTO model_login (login, senha, nome, email, usuario_id, perfil, sexo, cep, cidade, bairro, uf, logradouro, numero) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO model_login (login, senha, nome, email, usuario_id, perfil, sexo, cep, cidade, bairro, uf, logradouro, numero,datanascimento) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 
@@ -37,6 +37,7 @@ public class DAOUsuarioRepository {
 			pstm.setString(11, modelLogin.getUf());
 			pstm.setString(12, modelLogin.getLogradouro());
 			pstm.setString(13, modelLogin.getNumero());
+			pstm.setDate(14, modelLogin.getDataNascimento());
 			pstm.execute();
 			connection.commit();
 			
@@ -56,7 +57,7 @@ public class DAOUsuarioRepository {
 			}
 			
 		} else {
-			String sql = "UPDATE model_login SET login=?, senha=?, nome=?, email=?, perfil=?, sexo=?, cep=?, cidade=?, bairro=?, uf=?, logradouro=?, numero=? WHERE id = ?";
+			String sql = "UPDATE model_login SET login=?, senha=?, nome=?, email=?, perfil=?, sexo=?, cep=?, cidade=?, bairro=?, uf=?, logradouro=?, numero=? datanascimento=? WHERE id = ?";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			pstm.setString(1, modelLogin.getLogin());
@@ -71,7 +72,9 @@ public class DAOUsuarioRepository {
 			pstm.setString(10, modelLogin.getUf());
 			pstm.setString(11, modelLogin.getLogradouro());
 			pstm.setString(12, modelLogin.getNumero());
-			pstm.setLong(13, modelLogin.getId());
+			pstm.setDate(13, modelLogin.getDataNascimento());
+			pstm.setLong(14, modelLogin.getId());
+			
 
 			pstm.executeUpdate();
 			connection.commit();
@@ -151,7 +154,7 @@ public class DAOUsuarioRepository {
 	
 	public ModelLogin consultarUsuarioTelefone(Long id) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
-		String sql = "Select * from model_login WHERE id = ? AND useradmin is false limit 5";
+		String sql = "Select * from model_login WHERE id = ? AND useradmin is false";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setLong(1, id);
