@@ -82,14 +82,22 @@ public class ServletTelefone extends ServletGenericUtil  implements Serializable
 			
 			String usuario_pai_id = request.getParameter("id");
 			String numero = request.getParameter("numero");
+			String msg = "Salvo com sucesso!!";
 			
-			ModelTelefone modelTelefone = new ModelTelefone();
 			
-			modelTelefone.setUsuarioPaiId(daoUser.consultarUsuarioTelefone(Long.parseLong(usuario_pai_id)));
-			modelTelefone.setNumero(numero);
-			modelTelefone.setUsuarioCadId(super.getUserLogadoObj(request));
+			if(!daoTel.existeTelefone(numero, Long.parseLong(usuario_pai_id))) {
+							
+				ModelTelefone modelTelefone = new ModelTelefone();
+				
+				modelTelefone.setUsuarioPaiId(daoUser.consultarUsuarioTelefone(Long.parseLong(usuario_pai_id)));
+				modelTelefone.setNumero(numero);
+				modelTelefone.setUsuarioCadId(super.getUserLogadoObj(request));
+				
+				daoTel.gravaTelefone(modelTelefone);
 			
-			daoTel.gravaTelefone(modelTelefone);
+			}else {
+				msg = "Telefone já existe!!!";
+			}
 			
 			List<ModelTelefone> modelTelefones = daoTel.listaTelefoneUsers(Long.parseLong(usuario_pai_id));
 			ModelLogin modelLogin = daoUser.consultarUsuarioTelefone(Long.parseLong(usuario_pai_id));
@@ -97,7 +105,7 @@ public class ServletTelefone extends ServletGenericUtil  implements Serializable
 			request.setAttribute("modelLogin", modelLogin);
 			request.setAttribute("modelTelefones", modelTelefones);
 			request.setAttribute("load", "Números do usuário!!");
-			request.setAttribute("msg", "salvo com sucesso!!");
+			request.setAttribute("msg", msg);
 			request.getRequestDispatcher("principal/telefone.jsp").forward(request, response);
 			
 		} catch (Exception e) {

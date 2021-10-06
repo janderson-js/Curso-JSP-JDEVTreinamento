@@ -51,8 +51,6 @@ public class DAOTelefoneRepository {
 		DAOUsuarioRepository daoUser = new DAOUsuarioRepository();
 		
 		String sql = "Select * from telefone WHERE usuario_pai_id=?";
-		
-
 		PreparedStatement pstm = connection.prepareStatement(sql);		
 		pstm.setLong(1, idUserPai);
 		ResultSet rs = pstm.executeQuery();
@@ -68,6 +66,19 @@ public class DAOTelefoneRepository {
 		}
 		
 		return telefones;
+	}
+	
+	public boolean existeTelefone(String telefone, Long idUser) throws Exception {
+		String sql = "Select count(1) > 0 as existe from telefone where usuario_pai_id=? and numero=? ";
+		PreparedStatement pstm = connection.prepareStatement(sql);		
+		pstm.setLong(1, idUser);
+		pstm.setString(2, telefone);
+		
+		ResultSet rs = pstm.executeQuery();
+		rs.next();
+		
+		
+		return rs.getBoolean("existe");
 	}
 	
 }
