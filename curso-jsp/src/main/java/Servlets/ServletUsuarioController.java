@@ -174,6 +174,9 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			String logradouro = request.getParameter("logradouro");
 			String numero = request.getParameter("numero");
 			String dataNascimento = request.getParameter("dataNascimento");
+			String rendaMensal = request.getParameter("rendaMensal").split("\\ ")[1];
+			
+			rendaMensal = rendaMensal.replaceAll("\\.", "").replaceAll("\\,", ".");
 
 			ModelLogin modelLogin = new ModelLogin();
 
@@ -191,6 +194,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			modelLogin.setLogradouro(logradouro);
 			modelLogin.setNumero(numero);
 			modelLogin.setDataNascimento(new java.sql.Date(new SimpleDateFormat("dd/mm/yyyy").parse(dataNascimento).getTime()));
+			modelLogin.setRendaMensal(Double.parseDouble(rendaMensal));
 			
 			if(ServletFileUpload.isMultipartContent(request)) {
 				Part part = request.getPart("filefoto");
