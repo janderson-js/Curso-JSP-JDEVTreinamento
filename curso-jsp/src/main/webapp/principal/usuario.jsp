@@ -291,6 +291,25 @@
 	// mascara monetaria.
 	$("#rendaMensal").maskMoney({showSymbol:true,symbol:"R$ ",decimal:",", thousands:"."});
 	
+	const formatter = new Intl.NumberFormat('pt-BR', {
+		currency : 'BRL',
+		minimumFractionDigits : 2
+	});
+	
+	$("#rendaMensal").val(formatter.format($("#rendaMensal").val()));
+	
+	$("#rendaMensal").focus();
+	
+	// Formata a data de nascimento
+	
+	var dataNascimento = $("#dataNascimento").val();
+	
+	var dateFormat = new Date(dataNascimento);
+	
+	$("#dataNascimento").val(dateFormat.toLocaleDateString('pt-BR',{timeZone:'UTC'}));
+	
+	$("#nome").focus();
+	
 	// calendario jquery
 		$( function() {
 			  
