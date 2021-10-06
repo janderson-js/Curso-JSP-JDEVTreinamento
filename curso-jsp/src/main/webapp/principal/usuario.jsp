@@ -73,6 +73,12 @@
 																	class="form-bar"></span> <label class="float-label">Data de Nascimento:</label>
 															</div>
 															<div class="form-group form-default form-static-label">
+																<input type="text" name="rendaMensal" id="rendaMensal"
+																	class="form-control" required autocomplete="off"
+																	value="${modelLogin.rendaMensal}"> <span
+																	class="form-bar"></span> <label class="float-label">Renda Mensal:</label>
+															</div>
+															<div class="form-group form-default form-static-label">
 																<input type="email" name="email" id="email"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.email}"> <span
@@ -281,6 +287,29 @@
 
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	<script type="text/javascript">
+	
+	// mascara monetaria.
+	$("#rendaMensal").maskMoney({showSymbol:true,symbol:"R$ ",decimal:",", thousands:"."});
+	
+	const formatter = new Intl.NumberFormat('pt-BR', {
+		currency : 'BRL',
+		minimumFractionDigits : 2
+	});
+	
+	$("#rendaMensal").val(formatter.format($("#rendaMensal").val()));
+	
+	$("#rendaMensal").focus();
+	
+	// Formata a data de nascimento
+	
+	var dataNascimento = $("#dataNascimento").val();
+	
+	var dateFormat = new Date(dataNascimento);
+	
+	$("#dataNascimento").val(dateFormat.toLocaleDateString('pt-BR',{timeZone:'UTC'}));
+	
+	$("#nome").focus();
+	
 	// calendario jquery
 		$( function() {
 			  
