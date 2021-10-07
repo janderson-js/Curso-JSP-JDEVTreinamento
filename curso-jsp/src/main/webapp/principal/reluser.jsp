@@ -73,17 +73,31 @@
 																<tr>
 																	<th scope="col">ID</th>
 																	<th scope="col">Nome</th>
+																	<th scope="col">Tel.</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:forEach items="${listaUser}" var="list">
+																<c:forEach items="${listaUser}" var="ml">
 																	<tr>
 																		<td>
-																			<c:out value="${list.id}"></c:out>
+																			<c:out value="${ml.id}"></c:out>
 																		</td>																
 																		<td>
-																			<c:out value="${list.nome}"></c:out>
-																		</td>																
+																			<c:out value="${ml.nome}"></c:out>
+																		</td>
+																		<td>
+																			<div  class="btn-group">
+  																				<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    																				Telefone(s).
+  																				</button>
+																			 	<div class="dropdown-menu">
+																				    <c:forEach items="${ml.telefones}" var="fone">
+																						<span class="dropdown-item"><c:out value="${fone.numero}"></c:out></span></br>
+																					</c:forEach>
+																			 	 </div>
+																			</div>
+																		</td>	
+																		
 																	</tr>
 																</c:forEach>	
 															</tbody>

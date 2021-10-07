@@ -8,6 +8,7 @@ import java.util.List;
 
 import connection.SingleConnectionBanco;
 import model.ModelLogin;
+import model.ModelTelefone;
 
 public class DAOUsuarioRepository {
 
@@ -103,6 +104,7 @@ public class DAOUsuarioRepository {
 
 	}
 	
+	
 	public ModelLogin consultarUsuarioLogado(String login) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
 		String sql = "Select * from model_login WHERE upper(login)=upper(?)";
@@ -157,6 +159,8 @@ public class DAOUsuarioRepository {
 			modelLogin.setUf(rs.getString("uf"));
 			modelLogin.setLogradouro(rs.getString("logradouro"));
 			modelLogin.setNumero(rs.getString("numero"));
+			
+			modelLogin.setTelefones(this.listaTelefoneUsers(modelLogin.getId()));
 
 			user.add(modelLogin);
 		}
@@ -164,6 +168,29 @@ public class DAOUsuarioRepository {
 
 		return user;
 
+	}
+	
+	public List<ModelTelefone> listaTelefoneUsers(Long idUserPai) throws Exception{
+		
+		List<ModelTelefone> telefones = new ArrayList<ModelTelefone>();
+		DAOUsuarioRepository daoUser = new DAOUsuarioRepository();
+		
+		String sql = "Select * from telefone WHERE usuario_pai_id=?";
+		PreparedStatement pstm = connection.prepareStatement(sql);		
+		pstm.setLong(1, idUserPai);
+		ResultSet rs = pstm.executeQuery();
+		while (rs.next()) {
+			ModelTelefone telefone = new ModelTelefone();
+			
+			telefone.setId(rs.getLong("id"));
+			telefone.setNumero(rs.getString("numero"));
+			telefone.setUsuarioPaiId(this.consultarUsuarioTelefone(rs.getLong("usuario_pai_id")));
+			telefone.setUsuarioCadId(this.consultarUsuarioTelefone(rs.getLong("usuario_cad_id")));
+			
+			telefones.add(telefone);
+		}
+		
+		return telefones;
 	}
 	
 	public ModelLogin consultarUsuarioTelefone(Long id) throws Exception {
