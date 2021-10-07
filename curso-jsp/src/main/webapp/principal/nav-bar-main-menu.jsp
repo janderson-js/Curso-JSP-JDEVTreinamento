@@ -56,7 +56,7 @@
 			<li class="pcoded-hasmenu"><a href="javascript:void(0)"
 				class="waves-effect waves-dark"> <span class="pcoded-micon"><i
 						class="ti-layout-grid2-alt"></i></span> <span class="pcoded-mtext"
-					data-i18n="nav.basic-components.main">Components</span> <span
+					data-i18n="nav.basic-components.main">Cadastro</span> <span
 					class="pcoded-mcaret"></span>
 			</a>
 				<ul class="pcoded-submenu">
@@ -224,7 +224,7 @@
 		</ul>
 		<div class="pcoded-navigation-label" data-i18n="nav.category.forms">Relatórios</div>
 		<ul class="pcoded-item pcoded-left-item">
-			<li><a href="form-elements-component.html"
+			<li><a href="<%=request.getContextPath()%>/principal/reluser.jsp"
 				class="waves-effect waves-dark"> <span class="pcoded-micon"><i
 						class="ti-layers"></i><b>FC</b></span> <span class="pcoded-mtext"
 					data-i18n="nav.form-components.main">Usuários</span> <span
