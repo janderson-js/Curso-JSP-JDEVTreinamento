@@ -1,13 +1,16 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import connection.SingleConnectionBanco;
 import model.ModelLogin;
+import model.ModelTelefone;
 
 public class DAOUsuarioRepository {
 
@@ -103,6 +106,7 @@ public class DAOUsuarioRepository {
 
 	}
 	
+	
 	public ModelLogin consultarUsuarioLogado(String login) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
 		String sql = "Select * from model_login WHERE upper(login)=upper(?)";
@@ -127,32 +131,109 @@ public class DAOUsuarioRepository {
 		connection.commit();
 
 		return modelLogin;
-
 	}
 	
-	public ModelLogin consultarUsuario(String login) throws Exception {
-		ModelLogin modelLogin = new ModelLogin();
-		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false limit 5";
+	public List<ModelLogin> listaRelPorData(Long userLogado, String dataInicial, String dataFinal) throws Exception {
+
+		List<ModelLogin> user = new ArrayList<>();
+
+		String sql = "select * from model_login Where usuario_id=? AND datanascimento >= ?  AND datanascimento <= ? AND useradmin is false ORDER BY id ASC";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
-		pstm.setString(1, login);
+		pstm.setLong(1, userLogado);
+		pstm.setDate(2, Date.valueOf(new SimpleDateFormat("yyyy-mm-dd").format(new SimpleDateFormat("dd/mm/yyyy").parse(dataInicial))));
+		pstm.setDate(3, Date.valueOf(new SimpleDateFormat("yyyy-mm-dd").format(new SimpleDateFormat("dd/mm/yyyy").parse(dataFinal))));
 		ResultSet rs = pstm.executeQuery();
-		if (rs.next()) {
+		while (rs.next()) {
+
+			ModelLogin modelLogin = new ModelLogin();
 
 			modelLogin.setId(rs.getLong("id"));
 			modelLogin.setLogin(rs.getString("login"));
 			modelLogin.setSenha(rs.getString("senha"));
 			modelLogin.setNome(rs.getString("nome"));
+			modelLogin.setDataNascimento(rs.getDate("datanascimento"));
+			modelLogin.setRendaMensal(rs.getDouble("renda_mensal"));
 			modelLogin.setEmail(rs.getString("email"));
 			modelLogin.setPerfil(rs.getString("perfil"));
 			modelLogin.setSexo(rs.getString("sexo"));
-			modelLogin.setFotoUser(rs.getString("fotouser"));
+			modelLogin.setCep(rs.getString("cep"));
+			modelLogin.setCidade(rs.getString("cidade"));
+			modelLogin.setBairro(rs.getString("bairro"));
+			modelLogin.setUf(rs.getString("uf"));
+			modelLogin.setLogradouro(rs.getString("logradouro"));
+			modelLogin.setNumero(rs.getString("numero"));
+			
+			modelLogin.setTelefones(this.listaTelefoneUsers(modelLogin.getId()));
 
+			user.add(modelLogin);
 		}
 		connection.commit();
 
-		return modelLogin;
+		return user;
 
+	}
+	
+	public List<ModelLogin> listaRel(Long userLogado) throws Exception {
+
+		List<ModelLogin> user = new ArrayList<>();
+
+		String sql = "select * from model_login Where usuario_id=? AND useradmin is false ORDER BY id ASC";
+
+		PreparedStatement pstm = connection.prepareStatement(sql);
+		pstm.setLong(1, userLogado);
+		ResultSet rs = pstm.executeQuery();
+		while (rs.next()) {
+
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setId(rs.getLong("id"));
+			modelLogin.setLogin(rs.getString("login"));
+			modelLogin.setSenha(rs.getString("senha"));
+			modelLogin.setNome(rs.getString("nome"));
+			modelLogin.setDataNascimento(rs.getDate("datanascimento"));
+			modelLogin.setRendaMensal(rs.getDouble("renda_mensal"));
+			modelLogin.setEmail(rs.getString("email"));
+			modelLogin.setPerfil(rs.getString("perfil"));
+			modelLogin.setSexo(rs.getString("sexo"));
+			modelLogin.setCep(rs.getString("cep"));
+			modelLogin.setCidade(rs.getString("cidade"));
+			modelLogin.setBairro(rs.getString("bairro"));
+			modelLogin.setUf(rs.getString("uf"));
+			modelLogin.setLogradouro(rs.getString("logradouro"));
+			modelLogin.setNumero(rs.getString("numero"));
+			
+			modelLogin.setTelefones(this.listaTelefoneUsers(modelLogin.getId()));
+
+			user.add(modelLogin);
+		}
+		connection.commit();
+
+		return user;
+
+	}
+	
+	public List<ModelTelefone> listaTelefoneUsers(Long idUserPai) throws Exception{
+		
+		List<ModelTelefone> telefones = new ArrayList<ModelTelefone>();
+		DAOUsuarioRepository daoUser = new DAOUsuarioRepository();
+		
+		String sql = "Select * from telefone WHERE usuario_pai_id=?";
+		PreparedStatement pstm = connection.prepareStatement(sql);		
+		pstm.setLong(1, idUserPai);
+		ResultSet rs = pstm.executeQuery();
+		while (rs.next()) {
+			ModelTelefone telefone = new ModelTelefone();
+			
+			telefone.setId(rs.getLong("id"));
+			telefone.setNumero(rs.getString("numero"));
+			telefone.setUsuarioPaiId(this.consultarUsuarioTelefone(rs.getLong("usuario_pai_id")));
+			telefone.setUsuarioCadId(this.consultarUsuarioTelefone(rs.getLong("usuario_cad_id")));
+			
+			telefones.add(telefone);
+		}
+		
+		return telefones;
 	}
 	
 	public ModelLogin consultarUsuarioTelefone(Long id) throws Exception {

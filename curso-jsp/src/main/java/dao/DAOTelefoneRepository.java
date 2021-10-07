@@ -44,7 +44,7 @@ public class DAOTelefoneRepository {
 		pstm.executeUpdate();
 		connection.commit();
 	}
-	
+		
 	public List<ModelTelefone> listaTelefoneUsers(Long idUserPai) throws Exception{
 		
 		List<ModelTelefone> telefones = new ArrayList<ModelTelefone>();
