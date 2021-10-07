@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %> 
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -62,6 +64,31 @@
 															
 														</form>
 													</div>
+												</div>
+												<div class="card"  style="overflow: scroll; height: 500px;">
+													<div class="card-block">
+														<h2 class="title">${load}</h2>
+														<table class="table" id="tabelaResultadosView">
+															<thead>
+																<tr>
+																	<th scope="col">ID</th>
+																	<th scope="col">Nome</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:forEach items="${listaUser}" var="list">
+																	<tr>
+																		<td>
+																			<c:out value="${list.id}"></c:out>
+																		</td>																
+																		<td>
+																			<c:out value="${list.nome}"></c:out>
+																		</td>																
+																	</tr>
+																</c:forEach>	
+															</tbody>
+														</table>														
+													</div>																							
 												</div>
 											</div>
                                         </div>

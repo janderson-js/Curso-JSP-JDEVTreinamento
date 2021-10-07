@@ -127,31 +127,42 @@ public class DAOUsuarioRepository {
 		connection.commit();
 
 		return modelLogin;
-
 	}
 	
-	public ModelLogin consultarUsuario(String login) throws Exception {
-		ModelLogin modelLogin = new ModelLogin();
-		String sql = "Select * from model_login WHERE upper(login)=upper(?) AND useradmin is false limit 5";
+	public List<ModelLogin> listaRel(Long userLogado) throws Exception {
+
+		List<ModelLogin> user = new ArrayList<>();
+
+		String sql = "select * from model_login Where usuario_id=? AND useradmin is false ORDER BY id ASC";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
-		pstm.setString(1, login);
+		pstm.setLong(1, userLogado);
 		ResultSet rs = pstm.executeQuery();
-		if (rs.next()) {
+		while (rs.next()) {
+
+			ModelLogin modelLogin = new ModelLogin();
 
 			modelLogin.setId(rs.getLong("id"));
 			modelLogin.setLogin(rs.getString("login"));
 			modelLogin.setSenha(rs.getString("senha"));
 			modelLogin.setNome(rs.getString("nome"));
+			modelLogin.setDataNascimento(rs.getDate("datanascimento"));
+			modelLogin.setRendaMensal(rs.getDouble("renda_mensal"));
 			modelLogin.setEmail(rs.getString("email"));
 			modelLogin.setPerfil(rs.getString("perfil"));
 			modelLogin.setSexo(rs.getString("sexo"));
-			modelLogin.setFotoUser(rs.getString("fotouser"));
+			modelLogin.setCep(rs.getString("cep"));
+			modelLogin.setCidade(rs.getString("cidade"));
+			modelLogin.setBairro(rs.getString("bairro"));
+			modelLogin.setUf(rs.getString("uf"));
+			modelLogin.setLogradouro(rs.getString("logradouro"));
+			modelLogin.setNumero(rs.getString("numero"));
 
+			user.add(modelLogin);
 		}
 		connection.commit();
 
-		return modelLogin;
+		return user;
 
 	}
 	
