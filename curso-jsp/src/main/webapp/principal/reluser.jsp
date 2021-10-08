@@ -38,7 +38,7 @@
 														<form class="form-material" method="get" id="FormUser"
 															action="<%=request.getContextPath()%>/ServletUsuarioController?">
 															
-															<input type="hidden" name="acao" value="imprimirRelatorioUser">
+															<input type="hidden" id="acaoRelatorioImprimirTipo" name="acao" value="imprimirRelatorioUser">
 															
 															 <div class="form-row align-items-center">
 															 	<div class="col-auto">
@@ -58,7 +58,8 @@
 															      </div>
 															    </div>
 															    <div class="col-auto">
-															      <button type="submit" class="btn btn-primary mb-2">Imprimir Relatório</button>
+															      <button type="button" onclick="imprimirHTML();" class="btn btn-primary mb-2">Imprimir Relatório</button>
+															      <button type="button" onclick="imprimirPDF();" class="btn btn-primary mb-2">Imprimir PDF</button>
 															    </div>
 															 </div>
 															
@@ -120,6 +121,18 @@
       
    <jsp:include page="javascriptfile.jsp"></jsp:include>
    <script type="text/javascript">
+   
+   //Imprimir relatório em pdf
+   	function imprimirHTML() {
+   		document.getElementById("acaoRelatorioImprimirTipo").value = 'imprimirRelatorioUser';
+		$("#FormUser").submit();
+	};
+   
+   	function imprimirPDF() {
+   		document.getElementById("acaoRelatorioImprimirTipo").value = 'imprimirRelatorioPDF';
+		$("#FormUser").submit();
+	};
+   
    // calendario jquery
 	$( function() {
 		  
