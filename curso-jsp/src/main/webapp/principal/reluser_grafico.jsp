@@ -97,6 +97,9 @@
 	<script type="text/javascript">
 
 		//Gera o gráfico de salário
+		
+		var myChart = new Chart(document.getElementById('myChart'));
+		
 		function gerarGrafico() {
 			
 			var urlAction = document.getElementById('FormUser').action;
@@ -112,7 +115,9 @@
 					
 					var jason = JSON.parse(response);
 					
-					var myChart = new Chart(document.getElementById('myChart'), {
+					myChart.destroy();
+					
+					myChart = new Chart(document.getElementById('myChart'), {
 						type : 'line',
 						data : {
 							labels :jason.perfils,

@@ -196,13 +196,16 @@ public class ServletUsuarioController extends ServletGenericUtil {
 					
 					response.getWriter().write(json);
 					
-					
 				}else {
 					
+					BeanDtoGraficoSalarioUser beanDtoGraficoSalarioUser = daoUser.montarGraficoSalarial(super.getUserLogado(request), dataInicial, dataFinal);	
+					
+					ObjectMapper objectMapper = new ObjectMapper();
+					String json = objectMapper.writeValueAsString(beanDtoGraficoSalarioUser);
+					
+					response.getWriter().write(json);
 					
 				}
-				
-				
 			
 			}else {
 				List<ModelLogin> modelLogins  = daoUser.listarUsers(super.getUserLogado(request));
