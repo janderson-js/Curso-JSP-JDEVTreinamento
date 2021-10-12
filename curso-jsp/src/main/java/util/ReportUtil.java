@@ -26,7 +26,18 @@ public class ReportUtil implements Serializable {
 		JasperPrint impressoaraJasper = JasperFillManager.fillReport(caminhoJasper, new HashMap(), jrbcds);
 		
 		return JasperExportManager.exportReportToPdf(impressoaraJasper);
+	}
+	
+	public byte[] geraRelatorioPDF(List listaDados, String nomeRelatorio, HashMap<String, Object> params, ServletContext servletContext) throws Exception{
+		//cria a lista de dados que vem da consulta SQL do banco
+		JRBeanCollectionDataSource jrbcds = new JRBeanCollectionDataSource(listaDados);
 		
+		String caminhoJasper = servletContext.getRealPath("relatorio") + File.separator + nomeRelatorio + ".jasper";
+		
+		
+		JasperPrint impressoaraJasper = JasperFillManager.fillReport(caminhoJasper, params, jrbcds);
+		
+		return JasperExportManager.exportReportToPdf(impressoaraJasper);
 	}
 
 }

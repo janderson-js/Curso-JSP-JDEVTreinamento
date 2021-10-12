@@ -1,8 +1,10 @@
 package Servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tomcat.jakartaee.commons.compress.utils.IOUtils;
@@ -13,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.DAOUsuarioRepository;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -170,7 +173,10 @@ public class ServletUsuarioController extends ServletGenericUtil {
 					
 				}
 				
-				byte[] relatorio = new ReportUtil().geraRelatorioPDF(modelLogins, "rel-user-jsp", request.getServletContext());
+				HashMap<String, Object> params = new HashMap<String, Object>();
+				params.put("PARAMETER_SUB_REPORT", request.getServletContext().getRealPath("relatorio") + File.separator );
+				
+				byte[] relatorio = new ReportUtil().geraRelatorioPDF(modelLogins, "rel-user-jsp", params, request.getServletContext());
 				
 				response.setHeader("Content-Disposition", "attachment;filename=arquivo.pdf");
 				response.getOutputStream().write(relatorio);
