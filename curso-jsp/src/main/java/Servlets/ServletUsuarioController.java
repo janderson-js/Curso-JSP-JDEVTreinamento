@@ -1,8 +1,10 @@
 package Servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tomcat.jakartaee.commons.compress.utils.IOUtils;
@@ -11,8 +13,10 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beandto.BeanDtoGraficoSalarioUser;
 import dao.DAOUsuarioRepository;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -170,11 +174,39 @@ public class ServletUsuarioController extends ServletGenericUtil {
 					
 				}
 				
-				byte[] relatorio = new ReportUtil().geraRelatorioPDF(modelLogins, "rel-user-jsp", request.getServletContext());
+				HashMap<String, Object> params = new HashMap<String, Object>();
+				params.put("PARAMETER_SUB_REPORT", request.getServletContext().getRealPath("relatorio") + File.separator );
+				
+				byte[] relatorio = new ReportUtil().geraRelatorioPDF(modelLogins, "rel-user-jsp", params, request.getServletContext());
 				
 				response.setHeader("Content-Disposition", "attachment;filename=arquivo.pdf");
 				response.getOutputStream().write(relatorio);
 				
+			}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("graficoSalario")){
+				
+				String dataInicial = request.getParameter("dataInicial");
+				String dataFinal = request.getParameter("dataFinal");
+				
+				if(dataInicial == null || dataInicial.isEmpty() && dataFinal == null || dataFinal.isEmpty()) {
+					
+					BeanDtoGraficoSalarioUser beanDtoGraficoSalarioUser = daoUser.montarGraficoSalarial(super.getUserLogado(request));	
+					
+					ObjectMapper objectMapper = new ObjectMapper();
+					String json = objectMapper.writeValueAsString(beanDtoGraficoSalarioUser);
+					
+					response.getWriter().write(json);
+					
+				}else {
+					
+					BeanDtoGraficoSalarioUser beanDtoGraficoSalarioUser = daoUser.montarGraficoSalarial(super.getUserLogado(request), dataInicial, dataFinal);	
+					
+					ObjectMapper objectMapper = new ObjectMapper();
+					String json = objectMapper.writeValueAsString(beanDtoGraficoSalarioUser);
+					
+					response.getWriter().write(json);
+					
+				}
+			
 			}else {
 				List<ModelLogin> modelLogins  = daoUser.listarUsers(super.getUserLogado(request));
 				request.setAttribute("modelLogins", modelLogins);
