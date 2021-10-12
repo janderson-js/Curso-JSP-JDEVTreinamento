@@ -63,7 +63,7 @@
 
 					<c:if test="${perfil == 'ADMIN'}">										
 						<li class=" "><a
-							href="<%=request.getContextPath()%>/servletUsuarioController?acao=listarUser"
+							href="<%=request.getContextPath()%>/servletUsuarioController?acao=paginar&pagina=0"
 							class="waves-effect waves-dark"> <span class="pcoded-micon"><i
 									class="ti-angle-right"></i></span> <span class="pcoded-mtext"
 								data-i18n="nav.basic-components.alert">Usuário </span> <span

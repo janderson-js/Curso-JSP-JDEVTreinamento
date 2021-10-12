@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import beandto.BeanDtoGraficoSalarioUser;
 import connection.SingleConnectionBanco;
 import model.ModelLogin;
 import model.ModelTelefone;
@@ -498,7 +499,7 @@ public class DAOUsuarioRepository {
 
 		List<ModelLogin> user = new ArrayList<>();
 
-		String sql = "select * from model_login Where usuario_id=? AND useradmin is false ORDER BY id ASC offset 0 limit 5";
+		String sql = "select * from model_login Where usuario_id=? AND useradmin is false ORDER BY nome ASC offset 0 limit 5";
 
 		PreparedStatement pstm = connection.prepareStatement(sql);
 		pstm.setLong(1, userLogado);
@@ -519,6 +520,35 @@ public class DAOUsuarioRepository {
 
 		return user;
 
+	}
+	
+	public BeanDtoGraficoSalarioUser montarGraficoSalarial(Long userLogado) throws Exception{
+		
+		
+
+		String sql = "SELECT avg(renda_mensal) as media_salarial, perfil from model_login where usuario_id = ? group by perfil;";
+
+		PreparedStatement pstm = connection.prepareStatement(sql);
+		pstm.setLong(1, userLogado);
+		ResultSet rs = pstm.executeQuery();
+		
+		List<String> perfils = new ArrayList<String>();
+		List<Double> salarios = new ArrayList<Double>();
+		
+		BeanDtoGraficoSalarioUser beanDtoGraficoSalarioUser = new BeanDtoGraficoSalarioUser();
+		
+		while(rs.next()) {
+			Double media_salarial = rs.getDouble("media_salarial");
+			String perfil = rs.getString("perfil");
+			
+			perfils.add(perfil);
+			salarios.add(media_salarial);
+		}
+		
+		beanDtoGraficoSalarioUser.setPerfils(perfils);
+		beanDtoGraficoSalarioUser.setSalarios(salarios);
+		
+		return beanDtoGraficoSalarioUser;
 	}
 
 }
