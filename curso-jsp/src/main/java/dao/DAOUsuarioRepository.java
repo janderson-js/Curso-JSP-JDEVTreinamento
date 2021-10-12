@@ -539,7 +539,7 @@ public class DAOUsuarioRepository {
 		
 		while(rs.next()) {
 			Double media_salarial = rs.getDouble("media_salarial");
-			String perfil = rs.getString("perfil");
+			String perfil =rs.getString("perfil");
 			
 			perfils.add(perfil);
 			salarios.add(media_salarial);

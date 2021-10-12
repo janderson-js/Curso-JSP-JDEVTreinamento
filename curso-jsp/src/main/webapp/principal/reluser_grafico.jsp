@@ -49,7 +49,7 @@
 																	<label class="sr-only" for="dataInicial">Data -
 																		inicial</label> <input id="dataInicial" name="dataInicial"
 																		type="text" class="form-control mb-2"
-																		value="${dataInicial}">
+																		value="${dataInicial}" autocomplete="off" >
 																</div>
 																<div class="col-auto">
 																	<label for="dataInicial"> Até </label>
@@ -59,7 +59,7 @@
 																		Final</label>
 																	<div class="input-group mb-2">
 																		<input id="dataFinal" name="dataFinal" type="text"
-																			class="form-control" value="${dataFinal}">
+																			class="form-control" value="${dataFinal}"  autocomplete="off">
 																	</div>
 																</div>
 																<div class="col-auto">
@@ -98,21 +98,40 @@
 
 		//Gera o gráfico de salário
 		function gerarGrafico() {
+			
+			var urlAction = document.getElementById('FormUser').action;
+			var dataInicial = document.getElementById('dataInicial').value; 
+			var dataFinal = document.getElementById('dataFinal').value; 
+			
+			$.ajax({
 
-			var myChart = new Chart(document.getElementById('myChart'), {
-				type : 'line',
-				data : {
-					labels : [ 'January', 'February', 'March', 'April', 'May',
-						'June', ],
-					datasets : [ {
-						label : 'Gráfico de média salarial por tipo',
-						backgroundColor : 'rgb(255, 99, 132)',
-						borderColor : 'rgb(255, 99, 132)',
-						data : [ 0, 10, 5, 2, 20, 30, 45 ],
-					} ]
-				},
-				options : {}
-			});
+				method : "get",
+				url : urlAction,
+				data : "dataInicial=" + dataInicial + "&dataFinal=" + dataFinal + "&acao=graficoSalario",
+				success : function(response) {
+					
+					var jason = JSON.parse(response);
+					
+					var myChart = new Chart(document.getElementById('myChart'), {
+						type : 'line',
+						data : {
+							labels :jason.perfils,
+							datasets : [ {
+								label : 'Gráfico de média salarial por tipo',
+								backgroundColor : 'rgb(255, 99, 132)',
+								borderColor : 'rgb(255, 99, 132)',
+								data : jason.salarios,
+							} ]
+						},
+						options : {}
+					});
+				}
+
+			}).fail(
+					function(xhr, status, errorThrown) {
+						alert('Erro ao buscar dados para o gráfico! '
+								+ xhr.responseText);
+					});
 		}
 
 		// calendario jquery
